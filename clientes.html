@@ -1,0 +1,299 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Clientes - Histórico</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0b141a;
+color:#fff;
+display:flex;
+justify-content:center;
+}
+
+.container{
+width:100%;
+max-width:480px;
+padding:12px;
+}
+
+/* 🔥 HEADER PREMIUM */
+.header{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:16px;
+border-radius:16px;
+margin-bottom:12px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+border:1px solid rgba(255,255,255,0.05);
+box-shadow:
+0 8px 25px rgba(0,0,0,0.6),
+inset 0 0 10px rgba(255,255,255,0.02);
+}
+
+.header-left{
+display:flex;
+flex-direction:column;
+}
+
+.titulo{
+font-size:18px;
+font-weight:bold;
+}
+
+.sub{
+font-size:12px;
+opacity:0.7;
+}
+
+/* 🔥 BOTÃO VOLTAR */
+.voltar{
+background:#0f1720;
+border:1px solid rgba(255,255,255,0.1);
+color:#fff;
+padding:8px 12px;
+border-radius:10px;
+cursor:pointer;
+font-size:12px;
+transition:0.2s;
+}
+
+.voltar:hover{
+background:#00ff88;
+color:#000;
+}
+
+/* CARD */
+.card{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:14px;
+border-radius:12px;
+margin-top:10px;
+border:1px solid rgba(255,255,255,0.05);
+}
+
+/* ITEM */
+.item{
+background: linear-gradient(145deg,#1b2631,#111b21);
+padding:12px;
+border-radius:12px;
+margin-top:8px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border:1px solid rgba(255,255,255,0.05);
+}
+
+.left{
+display:flex;
+flex-direction:column;
+gap:3px;
+}
+
+.nome{
+font-weight:bold;
+}
+
+.tel{
+font-size:12px;
+opacity:0.7;
+}
+
+.info{
+font-size:12px;
+}
+
+.data{
+font-size:11px;
+opacity:0.6;
+}
+
+.right{
+display:flex;
+flex-direction:column;
+align-items:flex-end;
+gap:6px;
+}
+
+/* STATUS */
+.status{
+font-size:11px;
+padding:4px 8px;
+border-radius:6px;
+font-weight:bold;
+}
+
+.aprovado{
+background:#123c2f;
+color:#00ff88;
+}
+
+.pendente{
+background:#5a3b1a;
+color:#ffb84d;
+}
+
+.recusado{
+background:#3c1212;
+color:#ff4d4d;
+}
+
+/* WHATS */
+.whats{
+background:#25d366;
+border:none;
+padding:6px 8px;
+border-radius:8px;
+cursor:pointer;
+font-size:14px;
+}
+
+/* SELECT */
+select{
+width:100%;
+padding:8px;
+border-radius:8px;
+margin-top:6px;
+background:#111;
+color:#fff;
+border:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- 🔥 HEADER COM VOLTAR -->
+<div class="header">
+
+<div class="header-left">
+<div class="titulo">Clientes</div>
+<div class="sub">Histórico completo</div>
+</div>
+
+<button class="voltar" onclick="voltar()">Voltar</button>
+
+</div>
+
+<div class="card">
+
+<select id="filtro" onchange="render()">
+<option value="7">Últimos 7 dias</option>
+<option value="15">Últimos 15 dias</option>
+<option value="30">Últimos 30 dias</option>
+<option value="365">Último ano</option>
+</select>
+
+<div id="lista"></div>
+
+</div>
+
+</div>
+
+<script>
+
+/* 🔙 VOLTAR */
+function voltar(){
+window.location.href = "painel.html";
+}
+
+let dados = JSON.parse(localStorage.getItem("barbeiros")) || [];
+let id = localStorage.getItem("barbeiroAtual");
+let b = dados.find(x => x.id == id) || { agendamentos:[] };
+
+let lista = document.getElementById("lista");
+
+/* FILTRO */
+function dentroFiltro(dataStr, dias){
+let hoje = new Date();
+let data = new Date(dataStr);
+
+let limite = new Date();
+limite.setDate(hoje.getDate() - dias);
+
+return data >= limite;
+}
+
+/* WHATS */
+function abrirWhats(numero){
+
+if(!numero){
+alert("Cliente sem número");
+return;
+}
+
+numero = numero.replace(/\D/g,"");
+
+if(numero.length <= 11){
+numero = "55" + numero;
+}
+
+window.open(`https://wa.me/${numero}`, "_blank");
+}
+
+/* RENDER */
+function render(){
+
+let dias = Number(document.getElementById("filtro").value);
+
+let filtrados = b.agendamentos.filter(a => dentroFiltro(a.data, dias));
+
+filtrados.sort((a,b) => new Date(b.data) - new Date(a.data));
+
+lista.innerHTML = filtrados.map(a=>{
+
+let status = a.status || "pendente";
+
+let classe = 
+status === "aprovado" ? "aprovado" :
+status === "recusado" ? "recusado" : "pendente";
+
+let texto = 
+status === "aprovado" ? "APROVADO" :
+status === "recusado" ? "RECUSADO" : "PENDENTE";
+
+return `
+<div class="item">
+
+<div class="left">
+<div class="nome">${a.nome}</div>
+<div class="tel">${a.telefone || "-"}</div>
+<div class="info">${a.servico || "-"}</div>
+<div class="data">${a.data} • ${a.hora}</div>
+</div>
+
+<div class="right">
+
+<div class="status ${classe}">
+${texto}
+</div>
+
+<button class="whats" onclick="abrirWhats('${a.telefone || ""}')">
+📲
+</button>
+
+</div>
+
+</div>
+`;
+
+}).join("") || "<div style='margin-top:10px;opacity:0.6;'>Nenhum registro</div>";
+
+}
+
+render();
+
+</script>
+
+</body>
+</html>

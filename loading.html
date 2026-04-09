@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Entrando...</title>
+
+<style>
+body{
+margin:0;
+background:#0b141a;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+font-family:Arial;
+color:#fff;
+overflow:hidden;
+}
+
+/* CONTAINER */
+.wrap{
+text-align:center;
+}
+
+/* LINHA (CORTE) */
+.line{
+position:absolute;
+top:50%;
+left:0;
+height:2px;
+width:0%;
+background:linear-gradient(90deg,transparent,#00ff88,#00c96b,transparent);
+animation:lineGrow 3s ease-in-out forwards;
+filter:blur(0.5px);
+}
+
+/* TESOURA PREMIUM */
+.scissor{
+position:absolute;
+top:50%;
+left:-80px;
+transform:translateY(-50%);
+font-size:38px;
+animation:scissorMove 3s ease-in-out forwards;
+}
+
+/* BRILHO */
+.glow{
+position:absolute;
+top:50%;
+left:-100px;
+width:120px;
+height:3px;
+background:linear-gradient(90deg,transparent,#00ff88,transparent);
+filter:blur(6px);
+animation:glowMove 3s ease-in-out forwards;
+}
+
+/* TEXTO */
+.text{
+margin-top:120px;
+font-size:14px;
+opacity:0.6;
+letter-spacing:1px;
+animation:fade 2s ease infinite;
+}
+
+/* ANIMAÇÕES */
+@keyframes scissorMove{
+0%{ left:-80px; }
+50%{ left:50%; }
+100%{ left:110%; }
+}
+
+@keyframes lineGrow{
+0%{ width:0%; }
+100%{ width:100%; }
+}
+
+@keyframes glowMove{
+0%{ left:-100px; }
+100%{ left:110%; }
+}
+
+@keyframes fade{
+0%{opacity:0.3;}
+50%{opacity:1;}
+100%{opacity:0.3;}
+}
+
+/* FADE FINAL */
+.fade-out{
+animation:fadeOut 0.6s ease forwards;
+}
+
+@keyframes fadeOut{
+to{
+opacity:0;
+transform:scale(1.05);
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap" id="wrap">
+
+<div class="line"></div>
+<div class="glow"></div>
+<div class="scissor">✂️</div>
+
+<div class="text">Entrando no sistema...</div>
+
+</div>
+
+<script>
+
+/* 🔥 FINALIZA COM ESTILO */
+setTimeout(()=>{
+document.getElementById("wrap").classList.add("fade-out");
+
+setTimeout(()=>{
+window.location.href = "index.html";
+},600);
+
+},3000);
+
+</script>
+
+</body>
+</html>

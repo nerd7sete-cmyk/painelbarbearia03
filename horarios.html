@@ -1,0 +1,396 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Horários</title>
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+margin:0;
+font-family:Arial;
+background:#0b141a;
+color:#fff;
+display:flex;
+justify-content:center;
+}
+
+.container{
+width:100%;
+max-width:480px;
+padding:12px;
+}
+
+/* 🔥 HEADER PADRÃO */
+.header{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:14px 16px;
+border-radius:16px;
+margin-bottom:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border:1px solid rgba(255,255,255,0.05);
+box-shadow:0 8px 25px rgba(0,0,0,0.6);
+}
+
+.header-left{
+display:flex;
+flex-direction:column;
+}
+
+.titulo{
+font-size:16px;
+font-weight:bold;
+}
+
+.sub{
+font-size:12px;
+opacity:0.6;
+}
+
+/* 🔙 BOTÃO VOLTAR PADRÃO */
+.voltar{
+background:#0f1720;
+border:1px solid rgba(255,255,255,0.08);
+color:#fff;
+
+width:34px;
+height:28px;
+
+border-radius:8px;
+
+font-size:12px;
+cursor:pointer;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+padding:0;
+flex:none;
+}
+
+.voltar:hover{
+background:#00ff88;
+color:#000;
+}
+
+/* 🔥 CARD */
+.card{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:16px;
+border-radius:16px;
+margin-top:10px;
+border:1px solid rgba(255,255,255,0.05);
+box-shadow:0 6px 20px rgba(0,0,0,0.5);
+}
+
+.title{
+font-size:16px;
+margin-bottom:10px;
+}
+
+/* 🔥 BOTÕES */
+button{
+width:100%;
+margin-top:10px;
+padding:12px;
+border:none;
+border-radius:12px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.btn-verde{
+background:linear-gradient(90deg,#00ff88,#00c96b);
+color:#000;
+}
+
+/* 🔥 GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+margin-top:10px;
+}
+
+.hora{
+background:#0f1720;
+padding:10px;
+border-radius:8px;
+text-align:center;
+position:relative;
+}
+
+.remove{
+position:absolute;
+top:2px;
+right:4px;
+color:#ff4d4d;
+cursor:pointer;
+font-size:12px;
+}
+
+/* 🔥 INPUT */
+input{
+width:100%;
+padding:12px;
+margin-top:8px;
+border:none;
+border-radius:12px;
+background:#0f1720;
+color:#fff;
+}
+
+/* 🔥 DIA */
+.item-dia{
+background:#0f1720;
+padding:12px;
+border-radius:10px;
+margin-top:10px;
+border-left:3px solid #00ff88;
+}
+
+.status{
+text-align:center;
+margin-top:10px;
+font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- 🔥 HEADER -->
+<div class="header">
+<div class="header-left">
+<div class="titulo">Horários</div>
+<div class="sub">Gerenciar agenda</div>
+</div>
+
+<button class="voltar" onclick="voltar()">←</button>
+</div>
+
+<!-- PADRÃO -->
+<div class="card">
+
+<div class="title">Horários padrão</div>
+
+<button class="btn-verde" onclick="gerarHorarios()">
+Gerar automático (08:00 - 20:00)
+</button>
+
+<input type="time" id="novoHorario">
+<button onclick="addHorario()">Adicionar horário</button>
+
+<div id="listaHorarios" class="grid"></div>
+
+</div>
+
+<!-- DIA ESPECÍFICO -->
+<div class="card">
+
+<div class="title">Dia específico</div>
+
+<input type="date" id="dataDia">
+<input type="time" id="inicioDia">
+<input type="time" id="fimDia">
+
+<button class="btn-verde" onclick="salvarDia()">
+Salvar configuração do dia
+</button>
+
+<div id="status" class="status"></div>
+
+<div id="listaDias"></div>
+
+</div>
+
+</div>
+
+<script>
+
+let dados = JSON.parse(localStorage.getItem("barbeiros")) || [];
+let id = localStorage.getItem("barbeiroAtual");
+let b = dados.find(x => x.id == id);
+
+if(!b){
+window.location.href = "login.html";
+}
+
+b.horarios ||= [];
+b.dias ||= {};
+
+// GERAR PADRÃO
+function gerarHorarios(){
+
+b.horarios = [];
+
+let start = 8 * 60;
+let end = 20 * 60;
+
+for(let i=start;i<=end;i+=40){
+let h = String(Math.floor(i/60)).padStart(2,'0');
+let m = String(i%60).padStart(2,'0');
+b.horarios.push(`${h}:${m}`);
+}
+
+salvar();
+render();
+}
+
+// ADD
+function addHorario(){
+let h = document.getElementById("novoHorario").value;
+
+if(!h) return;
+
+if(!b.horarios.includes(h)){
+b.horarios.push(h);
+b.horarios.sort();
+salvar();
+render();
+}
+}
+
+// REMOVER
+function removerHorario(i){
+b.horarios.splice(i,1);
+salvar();
+render();
+}
+
+// GERAR LISTA
+function gerarLista(inicio,fim){
+
+if(!inicio || !fim) return [];
+
+let lista = [];
+
+let [h1,m1] = inicio.split(":").map(Number);
+let [h2,m2] = fim.split(":").map(Number);
+
+let s = h1*60 + m1;
+let e = h2*60 + m2;
+
+if(s >= e) return [];
+
+for(let i=s;i<=e;i+=40){
+let h = String(Math.floor(i/60)).padStart(2,'0');
+let m = String(i%60).padStart(2,'0');
+lista.push(`${h}:${m}`);
+}
+
+return lista;
+}
+
+// SALVAR DIA
+function salvarDia(){
+
+let data = document.getElementById("dataDia").value;
+let inicio = document.getElementById("inicioDia").value;
+let fim = document.getElementById("fimDia").value;
+let status = document.getElementById("status");
+
+if(!data || !inicio || !fim){
+status.innerText = "Preencha todos os campos";
+status.style.color = "red";
+return;
+}
+
+if(inicio >= fim){
+status.innerText = "Horário inválido";
+status.style.color = "red";
+return;
+}
+
+b.dias[data] = { inicio, fim };
+
+salvar();
+render();
+
+status.innerText = "Dia salvo com sucesso";
+status.style.color = "#00ff88";
+
+document.getElementById("dataDia").value = "";
+document.getElementById("inicioDia").value = "";
+document.getElementById("fimDia").value = "";
+}
+
+// REMOVER DIA
+function removerDia(data){
+delete b.dias[data];
+salvar();
+render();
+}
+
+// SALVAR
+function salvar(){
+let index = dados.findIndex(x => x.id == b.id);
+if(index !== -1){
+dados[index] = b;
+}
+localStorage.setItem("barbeiros", JSON.stringify(dados));
+}
+
+// RENDER
+function render(){
+
+document.getElementById("listaHorarios").innerHTML =
+b.horarios.map((h,i)=>`
+<div class="hora">
+${h}
+<span class="remove" onclick="removerHorario(${i})">x</span>
+</div>
+`).join("");
+
+document.getElementById("listaDias").innerHTML =
+Object.keys(b.dias).map(data=>{
+
+let d = b.dias[data];
+let horarios = gerarLista(d.inicio,d.fim);
+
+if(horarios.length === 0){
+return `
+<div class="item-dia">
+<strong>${data}</strong><br>
+<span style="color:#aaa;">Sem horários válidos</span>
+<button onclick="removerDia('${data}')" style="background:#ff4d4d;margin-top:10px;">
+Remover
+</button>
+</div>`;
+}
+
+return `
+<div class="item-dia">
+<strong>${data}</strong>
+
+<div class="grid">
+${horarios.map(h=>`<div class="hora">${h}</div>`).join("")}
+</div>
+
+<button onclick="removerDia('${data}')" style="background:#ff4d4d;margin-top:10px;">
+Remover
+</button>
+</div>
+`;
+
+}).join("");
+}
+
+render();
+
+function voltar(){
+window.location.href = "painel.html";
+}
+
+</script>
+
+</body>
+</html>

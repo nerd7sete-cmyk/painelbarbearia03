@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Planos</title>
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+margin:0;
+font-family:Arial;
+background:#0b141a;
+color:#fff;
+display:flex;
+justify-content:center;
+}
+
+.container{
+width:100%;
+max-width:420px;
+padding:15px;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+}
+
+.voltar{
+background:#2a3942;
+padding:8px 12px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.card{
+background:#202c33;
+padding:15px;
+border-radius:14px;
+margin-top:12px;
+box-shadow:0 4px 20px rgba(0,0,0,0.4);
+}
+
+.title{
+font-size:18px;
+margin-bottom:10px;
+}
+
+input, textarea{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+background:#111;
+color:#fff;
+font-size:15px;
+}
+
+textarea{
+resize:none;
+height:80px;
+}
+
+button{
+width:100%;
+margin-top:10px;
+padding:12px;
+border:none;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.btn-add{
+background:linear-gradient(135deg,#00a884,#00d4aa);
+}
+
+.plano{
+background:#111;
+padding:14px;
+border-radius:12px;
+margin-top:12px;
+border-left:4px solid #00d4aa;
+box-shadow:0 2px 10px rgba(0,0,0,0.3);
+}
+
+.plano-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.nome{
+font-size:16px;
+font-weight:bold;
+}
+
+.preco{
+font-size:16px;
+color:#00d4aa;
+font-weight:bold;
+}
+
+.info{
+margin-top:8px;
+font-size:14px;
+color:#ccc;
+}
+
+.desc{
+margin-top:6px;
+font-size:13px;
+color:#aaa;
+}
+
+.btn-remove{
+margin-top:10px;
+background:#ff4d4d;
+}
+
+.status{
+text-align:center;
+margin-top:10px;
+font-size:14px;
+color:#aaa;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+<h2>Planos</h2>
+<div class="voltar" onclick="voltar()">Voltar</div>
+</div>
+
+<div class="card">
+
+<div class="title">Criar plano</div>
+
+<input id="nomePlano" placeholder="Nome do plano">
+<input id="qtdPlano" placeholder="Quantidade de cortes">
+<input id="valorPlano" placeholder="Preço (ex: 100)">
+<textarea id="descPlano" placeholder="Descrição do plano"></textarea>
+
+<button class="btn-add" onclick="addPlano()">Adicionar plano</button>
+
+<div class="status" id="status"></div>
+
+</div>
+
+<div class="card">
+
+<div class="title">Seus planos</div>
+
+<div id="listaPlanos"></div>
+
+</div>
+
+</div>
+
+<script>
+
+let dados = JSON.parse(localStorage.getItem("barbeiros")) || [];
+let id = localStorage.getItem("barbeiroAtual");
+let b = dados.find(x => x.id == id);
+
+if(!b){
+window.location.href = "login.html";
+}
+
+b.planos ||= [];
+
+function addPlano(){
+
+let nome = document.getElementById("nomePlano").value;
+let qtd = document.getElementById("qtdPlano").value;
+let valor = document.getElementById("valorPlano").value;
+let desc = document.getElementById("descPlano").value;
+
+let status = document.getElementById("status");
+
+if(!nome || !qtd || !valor){
+status.style.color = "#ff4d4d";
+status.innerText = "Preencha os campos obrigatórios";
+return;
+}
+
+status.innerText = "Salvando...";
+
+setTimeout(()=>{
+
+b.planos.push({
+nome,
+quantidade: Number(qtd),
+preco: Number(valor),
+descricao: desc
+});
+
+salvar();
+render();
+
+document.getElementById("nomePlano").value="";
+document.getElementById("qtdPlano").value="";
+document.getElementById("valorPlano").value="";
+document.getElementById("descPlano").value="";
+
+status.style.color = "#00d4aa";
+status.innerText = "Plano criado com sucesso";
+
+},500);
+}
+
+function removerPlano(i){
+b.planos.splice(i,1);
+salvar();
+render();
+}
+
+function salvar(){
+let index = dados.findIndex(x => x.id == b.id);
+if(index !== -1){
+dados[index] = b;
+}
+localStorage.setItem("barbeiros", JSON.stringify(dados));
+}
+
+function render(){
+
+let lista = document.getElementById("listaPlanos");
+
+lista.innerHTML = b.planos.map((p,i)=>{
+
+let preco = p.preco ? "R$ " + p.preco.toFixed(2) : "—";
+let qtd = p.quantidade || 0;
+let desc = p.descricao || "Sem descrição";
+
+return `
+<div class="plano">
+
+<div class="plano-top">
+<div class="nome">${p.nome}</div>
+<div class="preco">${preco}</div>
+</div>
+
+<div class="info">${qtd} cortes incluídos</div>
+<div class="desc">${desc}</div>
+
+<button class="btn-remove" onclick="removerPlano(${i})">
+Remover plano
+</button>
+
+</div>
+`;
+
+}).join("");
+}
+
+render();
+
+function voltar(){
+window.location.href = "painel.html";
+}
+
+</script>
+
+</body>
+</html>

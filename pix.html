@@ -1,0 +1,322 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Integração PIX</title>
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+margin:0;
+font-family:Arial;
+background:#0b141a;
+color:#fff;
+display:flex;
+justify-content:center;
+}
+
+.container{
+width:100%;
+max-width:420px;
+padding:15px;
+}
+
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:14px;
+border-radius:14px;
+}
+
+.voltar{
+background:#0f1720;
+padding:8px 12px;
+border-radius:10px;
+cursor:pointer;
+}
+
+/* CARD */
+.card{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:16px;
+border-radius:16px;
+margin-top:12px;
+}
+
+/* INPUT */
+input{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+background:#0b141a;
+color:#fff;
+}
+
+/* BOTÃO */
+.btn-salvar{
+width:100%;
+margin-top:10px;
+padding:12px;
+border:none;
+border-radius:12px;
+font-weight:bold;
+cursor:pointer;
+background:#00ff88;
+color:#000;
+}
+
+/* LISTA */
+.pix-item{
+padding:12px;
+border-radius:12px;
+margin-top:10px;
+background:#0f1720;
+border:1px solid rgba(255,255,255,0.05);
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.pix-info{
+max-width:70%;
+}
+
+.pix-nome{
+font-weight:bold;
+}
+
+.pix-chave{
+font-size:12px;
+opacity:0.7;
+margin-top:4px;
+}
+
+.pix-extra{
+font-size:11px;
+opacity:0.6;
+margin-top:4px;
+}
+
+/* SWITCH */
+.switch{
+width:42px;
+height:22px;
+background:#333;
+border-radius:20px;
+position:relative;
+cursor:pointer;
+transition:0.3s;
+}
+
+.switch::after{
+content:"";
+width:18px;
+height:18px;
+background:#fff;
+border-radius:50%;
+position:absolute;
+top:2px;
+left:2px;
+transition:0.3s;
+}
+
+.switch.ativo{
+background:#00ff88;
+}
+
+.switch.ativo::after{
+left:22px;
+}
+
+/* DELETE */
+.delete{
+margin-top:6px;
+font-size:11px;
+color:#ff4d4d;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+<h3>Integração PIX</h3>
+<div class="voltar" onclick="voltar()">Voltar</div>
+</div>
+
+<div class="card">
+
+<input id="pixNome" placeholder="Nome do titular">
+<input id="pixBanco" placeholder="Banco (opcional)">
+<input id="pixChave" placeholder="Chave PIX">
+
+<button class="btn-salvar" onclick="salvarPix()">Salvar novo PIX</button>
+
+</div>
+
+<div class="card">
+<b>Seus PIX</b>
+<div id="listaPix"></div>
+</div>
+
+</div>
+
+<script>
+
+let dados = JSON.parse(localStorage.getItem("barbeiros")) || [];
+let id = localStorage.getItem("barbeiroAtual");
+let b = dados.find(x => x.id == id);
+
+if(!b) location.href = "login.html";
+
+b.pixList ||= [];
+b.pixAtivo ||= null;
+
+// 🔥 IDENTIFICAR TIPO
+function tipoChave(chave){
+
+if(chave.includes("@")) return "Email";
+if(chave.length >= 11 && !isNaN(chave)) return "CPF/Telefone";
+if(chave.length > 20) return "Aleatória";
+
+return "PIX";
+}
+
+// 🔥 MASCARA
+function mascarar(chave){
+
+if(chave.includes("@")){
+let [user,dom] = chave.split("@");
+return user.slice(0,3) + "***@" + dom;
+}
+
+if(chave.length >= 11){
+return chave.slice(0,3) + "*****" + chave.slice(-2);
+}
+
+return chave;
+}
+
+// SALVAR PIX
+function salvarPix(){
+
+let nome = pixNome.value;
+let chave = pixChave.value;
+let banco = pixBanco.value;
+
+if(!nome || !chave) return;
+
+let novo = {
+id: Date.now(),
+nome,
+chave,
+banco
+};
+
+b.pixList.push(novo);
+
+if(!b.pixAtivo){
+b.pixAtivo = novo.id;
+}
+
+salvarDados();
+
+pixNome.value = "";
+pixChave.value = "";
+pixBanco.value = "";
+
+render();
+}
+
+// SWITCH
+function togglePix(idPix){
+
+if(b.pixAtivo === idPix){
+b.pixAtivo = null;
+}else{
+b.pixAtivo = idPix;
+}
+
+salvarDados();
+render();
+}
+
+// REMOVER
+function removerPix(idPix){
+
+b.pixList = b.pixList.filter(p=>p.id != idPix);
+
+if(b.pixAtivo === idPix){
+b.pixAtivo = null;
+}
+
+salvarDados();
+render();
+}
+
+// SALVAR
+function salvarDados(){
+let i = dados.findIndex(x=>x.id == b.id);
+dados[i] = b;
+localStorage.setItem("barbeiros", JSON.stringify(dados));
+}
+
+// RENDER
+function render(){
+
+let lista = document.getElementById("listaPix");
+lista.innerHTML = "";
+
+if(b.pixList.length === 0){
+lista.innerHTML = "<p style='opacity:0.6'>Nenhum PIX cadastrado</p>";
+return;
+}
+
+b.pixList.forEach(p=>{
+
+let ativo = p.id === b.pixAtivo;
+
+let div = document.createElement("div");
+div.className = "pix-item";
+
+div.innerHTML = `
+<div class="pix-info">
+<div class="pix-nome">${p.nome}</div>
+<div class="pix-chave">${mascarar(p.chave)}</div>
+<div class="pix-extra">
+${tipoChave(p.chave)} ${p.banco ? "• " + p.banco : ""}
+</div>
+<div class="delete" onclick="removerPix(${p.id})">Remover</div>
+</div>
+
+<div class="switch ${ativo ? 'ativo' : ''}" onclick="togglePix(${p.id})"></div>
+`;
+
+lista.appendChild(div);
+
+});
+
+}
+
+function voltar(){
+window.location.href = "painel.html";
+}
+
+render();
+
+</script>
+
+</body>
+</html>

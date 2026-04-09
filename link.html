@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Link</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0b141a;
+color:#fff;
+display:flex;
+justify-content:center;
+}
+
+.container{
+width:100%;
+max-width:480px;
+padding:12px;
+}
+
+/* 🔥 HEADER PADRÃO */
+.header{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:14px 16px;
+border-radius:16px;
+margin-bottom:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border:1px solid rgba(255,255,255,0.05);
+box-shadow:0 8px 25px rgba(0,0,0,0.6);
+}
+
+.header-left{
+display:flex;
+flex-direction:column;
+}
+
+.titulo{
+font-size:16px;
+font-weight:bold;
+}
+
+.sub{
+font-size:12px;
+opacity:0.6;
+}
+
+/* 🔙 BOTÃO VOLTAR PEQUENO */
+.voltar{
+background:#0f1720;
+border:1px solid rgba(255,255,255,0.08);
+color:#fff;
+
+width:34px;
+height:28px;
+
+border-radius:8px;
+
+font-size:12px;
+cursor:pointer;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+padding:0;
+flex:none;
+}
+
+.voltar:hover{
+background:#00ff88;
+color:#000;
+}
+
+/* 🔥 CARD */
+.card{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:18px;
+border-radius:18px;
+box-shadow:0 10px 40px rgba(0,0,0,0.7);
+border:1px solid rgba(255,255,255,0.05);
+}
+
+/* 🔥 TOPO */
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:12px;
+}
+
+.status{
+font-size:12px;
+padding:6px 10px;
+border-radius:8px;
+background:#0f2f24;
+color:#00ff88;
+font-weight:bold;
+}
+
+/* 🔥 TEXTO */
+.desc{
+font-size:13px;
+color:#aaa;
+margin-bottom:14px;
+}
+
+/* 🔥 BOTÕES */
+.botoes{
+display:flex;
+gap:10px;
+}
+
+button{
+flex:1;
+padding:12px;
+border:none;
+border-radius:12px;
+font-weight:bold;
+cursor:pointer;
+transition:0.2s;
+}
+
+/* copiar */
+.copy{
+background:#00a884;
+color:#fff;
+}
+
+/* abrir */
+.open{
+background:#0f1720;
+color:#fff;
+border:1px solid rgba(255,255,255,0.1);
+}
+
+/* hover */
+button:hover{
+transform: scale(1.03);
+}
+
+/* feedback */
+.copy-ok{
+background:#0f2f24 !important;
+color:#00ff88;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- 🔥 HEADER -->
+<div class="header">
+<div class="header-left">
+<div class="titulo">Link</div>
+<div class="sub">Divulgação automática</div>
+</div>
+
+<button class="voltar" onclick="voltar()">←</button>
+</div>
+
+<div class="card">
+
+<div class="top">
+<strong>Link de divulgação</strong>
+<div class="status">ATIVO</div>
+</div>
+
+<div class="desc">
+Compartilhe seu link e receba novos clientes automaticamente
+</div>
+
+<div class="botoes">
+<button id="btnCopy" class="copy" onclick="copiar()">Copiar link</button>
+<button class="open" onclick="abrir()">Abrir</button>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function voltar(){
+window.location.href = "painel.html";
+}
+
+let dados = JSON.parse(localStorage.getItem("barbeiros")) || [];
+let id = localStorage.getItem("barbeiroAtual");
+let b = dados.find(x => x.id == id) || {};
+
+/* 🔥 GERAR LINK */
+function gerarLink(){
+let base = location.href.substring(0, location.href.lastIndexOf("/"));
+return base + "/index.html?id=" + (b.id || "user");
+}
+
+let link = gerarLink();
+
+/* 🔥 COPIAR */
+function copiar(){
+navigator.clipboard.writeText(link);
+
+let btn = document.getElementById("btnCopy");
+
+btn.innerText = "Copiado ✓";
+btn.classList.add("copy-ok");
+
+setTimeout(()=>{
+btn.innerText = "Copiar link";
+btn.classList.remove("copy-ok");
+},1500);
+}
+
+/* 🔥 ABRIR */
+function abrir(){
+window.open(link,"_blank");
+}
+
+</script>
+
+</body>
+</html>

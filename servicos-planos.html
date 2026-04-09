@@ -1,0 +1,314 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Serviços e Planos</title>
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+margin:0;
+font-family:Arial;
+background:#0b141a;
+color:#fff;
+display:flex;
+justify-content:center;
+}
+
+.container{
+width:100%;
+max-width:480px;
+padding:12px;
+}
+
+/* HEADER */
+.header{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:14px 16px;
+border-radius:16px;
+margin-bottom:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border:1px solid rgba(255,255,255,0.05);
+}
+
+.header-left{
+display:flex;
+flex-direction:column;
+}
+
+.titulo{font-size:16px;font-weight:bold;}
+.sub{font-size:12px;opacity:0.6;}
+
+.voltar{
+background:#0f1720;
+border:1px solid rgba(255,255,255,0.08);
+width:34px;
+height:28px;
+border-radius:8px;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+}
+
+.voltar:hover{
+background:#00ff88;
+color:#000;
+}
+
+/* CARD */
+.card{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:14px;
+border-radius:14px;
+margin-top:10px;
+border:1px solid rgba(255,255,255,0.05);
+}
+
+/* INPUT */
+input, textarea{
+width:100%;
+padding:12px;
+margin-top:8px;
+border:none;
+border-radius:12px;
+background:#0f1720;
+color:#fff;
+}
+
+/* BOTÃO */
+button{
+width:100%;
+margin-top:10px;
+padding:12px;
+border:none;
+border-radius:12px;
+font-weight:bold;
+background:linear-gradient(90deg,#00ff88,#00c96b);
+color:#000;
+cursor:pointer;
+}
+
+/* LISTA */
+.lista{
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+/* ITEM */
+.item{
+background:#0f1720;
+padding:10px;
+border-radius:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+/* INFO */
+.info{
+display:flex;
+flex-direction:column;
+gap:2px;
+}
+
+.nome{
+font-size:13px;
+font-weight:600;
+}
+
+.preco{
+font-size:12px;
+color:#00ff88;
+}
+
+.extra{
+font-size:11px;
+color:#aaa;
+}
+
+/* BOTÃO X */
+.btn-remove{
+background:#ff4d4d;
+border:none;
+color:#fff;
+width:28px;
+height:28px;
+border-radius:8px;
+font-size:12px;
+cursor:pointer;
+}
+
+/* TITULO */
+.section-title{
+margin-top:12px;
+font-size:13px;
+color:#aaa;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+<div class="header-left">
+<div class="titulo">Serviços & Planos</div>
+<div class="sub">Gerenciar ofertas</div>
+</div>
+<div class="voltar" onclick="voltar()">←</div>
+</div>
+
+<div class="section-title">Criar</div>
+
+<div class="card">
+<input id="nomeServico" placeholder="Nome do serviço">
+<input id="valorServico" placeholder="Preço">
+<button onclick="addServico()">Adicionar serviço</button>
+</div>
+
+<div class="card">
+<input id="nomePlano" placeholder="Nome do plano">
+<input id="qtdPlano" placeholder="Qtd cortes">
+<input id="valorPlano" placeholder="Preço">
+<textarea id="descPlano" placeholder="Descrição"></textarea>
+<button onclick="addPlano()">Adicionar plano</button>
+</div>
+
+<div class="section-title">Cadastrados</div>
+
+<div class="card">
+<h4>Serviços</h4>
+<div id="listaServicos" class="lista"></div>
+</div>
+
+<div class="card">
+<h4>Planos</h4>
+<div id="listaPlanos" class="lista"></div>
+</div>
+
+</div>
+
+<script>
+
+let dados = JSON.parse(localStorage.getItem("barbeiros")) || [];
+
+let id = localStorage.getItem("barbeiroAtual") || "user";
+localStorage.setItem("barbeiroAtual", id);
+
+let index = dados.findIndex(x => x.id === id);
+
+if(index === -1){
+dados.push({ id:id, servicos:[], planos:[] });
+index = dados.length - 1;
+}
+
+let b = dados[index];
+
+// SALVAR
+function salvar(){
+dados[index] = b;
+localStorage.setItem("barbeiros", JSON.stringify(dados));
+}
+
+// SERVIÇO
+function addServico(){
+
+let nome = nomeServico.value.trim();
+let valor = Number(valorServico.value);
+
+if(!nome || isNaN(valor)) return alert("Preencha corretamente");
+
+b.servicos.push({ nome, preco: valor });
+
+salvar();
+render();
+
+nomeServico.value="";
+valorServico.value="";
+}
+
+// PLANO
+function addPlano(){
+
+let nome = nomePlano.value.trim();
+let qtd = Number(qtdPlano.value);
+let valor = Number(valorPlano.value);
+let desc = descPlano.value;
+
+if(!nome || isNaN(qtd) || isNaN(valor)) return alert("Preencha corretamente");
+
+b.planos.push({
+nome,
+quantidade:qtd,
+preco:valor,
+descricao:desc
+});
+
+salvar();
+render();
+
+nomePlano.value="";
+qtdPlano.value="";
+valorPlano.value="";
+descPlano.value="";
+}
+
+// REMOVER
+function removerServico(i){
+b.servicos.splice(i,1);
+salvar();
+render();
+}
+
+function removerPlano(i){
+b.planos.splice(i,1);
+salvar();
+render();
+}
+
+// RENDER LIMPO
+function render(){
+
+listaServicos.innerHTML =
+b.servicos.map((s,i)=>`
+<div class="item">
+<div class="info">
+<div class="nome">${s.nome}</div>
+<div class="preco">R$ ${s.preco}</div>
+</div>
+<button class="btn-remove" onclick="removerServico(${i})">X</button>
+</div>
+`).join("");
+
+listaPlanos.innerHTML =
+b.planos.map((p,i)=>`
+<div class="item">
+<div class="info">
+<div class="nome">${p.nome}</div>
+<div class="preco">R$ ${p.preco}</div>
+<div class="extra">${p.quantidade} cortes</div>
+</div>
+<button class="btn-remove" onclick="removerPlano(${i})">X</button>
+</div>
+`).join("");
+
+}
+
+render();
+
+function voltar(){
+window.location.href="painel.html";
+}
+
+</script>
+
+</body>
+</html>

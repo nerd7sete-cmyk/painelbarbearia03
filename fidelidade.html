@@ -1,0 +1,287 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Fidelidade</title>
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+margin:0;
+font-family:Arial;
+background:#0b141a;
+color:#fff;
+display:flex;
+justify-content:center;
+}
+
+.container{
+max-width:480px;
+width:100%;
+padding:12px;
+}
+
+/* HEADER */
+.header{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:14px 16px;
+border-radius:16px;
+margin-bottom:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border:1px solid rgba(255,255,255,0.05);
+box-shadow:0 8px 25px rgba(0,0,0,0.6);
+}
+
+.header-left{
+display:flex;
+flex-direction:column;
+}
+
+.titulo{
+font-size:16px;
+font-weight:bold;
+}
+
+.sub{
+font-size:12px;
+opacity:0.6;
+}
+
+/* BOTÃO VOLTAR */
+.voltar{
+background:#0f1720;
+border:1px solid rgba(255,255,255,0.08);
+color:#fff;
+width:34px;
+height:28px;
+border-radius:8px;
+font-size:12px;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.voltar:hover{
+background:#00ff88;
+color:#000;
+}
+
+/* CARD */
+.card{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:15px;
+border-radius:14px;
+margin-top:10px;
+border:1px solid rgba(255,255,255,0.05);
+box-shadow:0 6px 20px rgba(0,0,0,0.5);
+}
+
+/* INPUTS */
+input, select{
+width:100%;
+padding:12px;
+margin-top:8px;
+border:none;
+border-radius:10px;
+background:#0f1720;
+color:#fff;
+}
+
+/* BOTÃO */
+button{
+width:100%;
+margin-top:10px;
+padding:12px;
+border:none;
+border-radius:12px;
+background:linear-gradient(90deg,#00ff88,#00c96b);
+color:#000;
+font-weight:bold;
+cursor:pointer;
+}
+
+/* LISTA */
+.lista{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-top:10px;
+}
+
+.item{
+background:#0f1720;
+padding:10px;
+border-radius:10px;
+font-size:13px;
+}
+
+.nome{ font-weight:bold; }
+.tel{ color:#aaa; font-size:12px; }
+.prog{ color:#00ff88; margin-top:4px; }
+
+.actions{
+display:flex;
+gap:5px;
+margin-top:6px;
+}
+
+.actions button{
+flex:1;
+font-size:11px;
+padding:6px;
+}
+
+.del{ background:#ff4d4d; color:#fff; }
+
+.ok{
+border:1px solid #00ff88;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+<div class="header-left">
+<div class="titulo">Fidelidade</div>
+<div class="sub">Controle de clientes</div>
+</div>
+
+<button class="voltar" onclick="voltar()">←</button>
+</div>
+
+<!-- CONFIG -->
+<div class="card">
+
+<input id="meta" placeholder="Meta de cortes (ex: 10 = cliente ganha algo após 10 cortes)">
+
+<select id="tipo">
+<option value="gratis">Recompensa: Corte grátis</option>
+<option value="desconto">Recompensa: Desconto</option>
+</select>
+
+<input id="valor" placeholder="Valor do desconto (ex: 10 = R$10 OFF)">
+
+<button onclick="salvarConfig()">Salvar config</button>
+
+</div>
+
+<!-- LISTA -->
+<div id="lista" class="lista"></div>
+
+</div>
+
+<script>
+
+// CONFIG
+let config = JSON.parse(localStorage.getItem("configFidelidade")) || {
+meta:10,
+tipo:"gratis",
+valor:0
+};
+
+// CLIENTES
+let clientes = JSON.parse(localStorage.getItem("clientesFidelidade")) || [];
+
+function salvarClientes(){
+localStorage.setItem("clientesFidelidade", JSON.stringify(clientes));
+}
+
+function salvarConfig(){
+config.meta = Number(meta.value) || 10;
+config.tipo = tipo.value;
+config.valor = Number(valor.value) || 0;
+
+localStorage.setItem("configFidelidade", JSON.stringify(config));
+
+alert("Salvo!");
+render();
+}
+
+// ADD CORTE
+function addCorte(i){
+clientes[i].cortes = (clientes[i].cortes || 0) + 1;
+salvarClientes();
+render();
+}
+
+// RESET
+function aplicar(i){
+clientes[i].cortes = 0;
+salvarClientes();
+render();
+}
+
+// REMOVER
+function remover(i){
+clientes.splice(i,1);
+salvarClientes();
+render();
+}
+
+// FORMATAR TEL
+function formatarTel(t){
+if(!t) return "Sem número";
+return t;
+}
+
+// RENDER
+function render(){
+
+meta.value = config.meta;
+tipo.value = config.tipo;
+valor.value = config.valor;
+
+let lista = document.getElementById("lista");
+
+if(clientes.length === 0){
+lista.innerHTML = "<div style='color:#aaa'>Nenhum cliente ainda</div>";
+return;
+}
+
+lista.innerHTML = clientes.map((c,i)=>{
+
+let cortes = c.cortes || 0;
+let completo = cortes >= config.meta;
+
+return `
+<div class="item ${completo?"ok":""}">
+
+<div class="nome">${c.nome || "Cliente"}</div>
+<div class="tel">${formatarTel(c.tel)}</div>
+
+<div class="prog">${cortes}/${config.meta}</div>
+
+<div class="actions">
+<button onclick="addCorte(${i})">+1</button>
+${completo ? `<button onclick="aplicar(${i})">OK</button>` : ""}
+<button class="del" onclick="remover(${i})">X</button>
+</div>
+
+</div>
+`;
+
+}).join("");
+
+}
+
+render();
+
+// VOLTAR
+function voltar(){
+window.location.href = "painel.html";
+}
+
+</script>
+
+</body>
+</html>

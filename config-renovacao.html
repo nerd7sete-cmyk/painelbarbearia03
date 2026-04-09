@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Configuração de Renovação</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0b141a;
+color:#fff;
+display:flex;
+justify-content:center;
+}
+
+.container{
+width:100%;
+max-width:420px;
+padding:16px;
+}
+
+/* CARD PADRÃO */
+.card{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:20px;
+border-radius:18px;
+border:1px solid rgba(255,255,255,0.05);
+box-shadow:0 8px 25px rgba(0,0,0,0.6);
+}
+
+/* TITULO */
+.titulo{
+font-size:18px;
+font-weight:bold;
+margin-bottom:12px;
+}
+
+/* INPUT */
+input{
+width:100%;
+padding:14px;
+margin-top:10px;
+border:none;
+border-radius:12px;
+background:#0f1720;
+color:#fff;
+font-size:14px;
+outline:none;
+}
+
+/* BOTÃO */
+button{
+width:100%;
+margin-top:14px;
+padding:14px;
+border:none;
+border-radius:12px;
+font-weight:bold;
+background:linear-gradient(135deg,#00ff88,#00c96b);
+cursor:pointer;
+transition:0.2s;
+}
+
+button:hover{
+opacity:0.9;
+}
+
+/* STATUS */
+.status{
+margin-top:10px;
+text-align:center;
+font-size:13px;
+opacity:0.7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<div class="titulo">💰 Configuração de Renovação</div>
+
+<input id="plano1" placeholder="Plano mensal (R$)">
+<input id="plano3" placeholder="Plano 3 meses (R$)">
+<input id="plano12" placeholder="Plano anual (R$)">
+<input id="pix" placeholder="Chave PIX">
+
+<button onclick="salvar()">Salvar</button>
+
+<div class="status" id="status"></div>
+
+</div>
+
+</div>
+
+<script>
+
+// 🔥 CARREGAR CONFIG
+let config = JSON.parse(localStorage.getItem("configRenovacao")) || {};
+
+document.getElementById("plano1").value = config.mensal || "";
+document.getElementById("plano3").value = config.trimestral || "";
+document.getElementById("plano12").value = config.anual || "";
+document.getElementById("pix").value = config.pix || "";
+
+// 🔥 SALVAR CONFIG
+function salvar(){
+
+let mensal = document.getElementById("plano1").value;
+let trimestral = document.getElementById("plano3").value;
+let anual = document.getElementById("plano12").value;
+let pix = document.getElementById("pix").value;
+
+let status = document.getElementById("status");
+
+let config = {
+mensal,
+trimestral,
+anual,
+pix
+};
+
+localStorage.setItem("configRenovacao", JSON.stringify(config));
+
+status.style.color = "#00ff88";
+status.innerText = "Salvo com sucesso 🚀";
+}
+
+</script>
+
+</body>
+</html>

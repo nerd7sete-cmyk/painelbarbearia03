@@ -1,0 +1,263 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Painel Barbeiro PRO</title>
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+margin:0;
+font-family:Arial;
+background:#0b141a;
+color:#fff;
+display:flex;
+justify-content:center;
+}
+
+.container{
+width:100%;
+max-width:480px;
+padding:16px;
+}
+
+/* 🔥 HEADER */
+.header{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:16px;
+border-radius:18px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:16px;
+
+border:1px solid rgba(255,255,255,0.05);
+box-shadow:
+0 8px 25px rgba(0,0,0,0.6),
+inset 0 0 10px rgba(255,255,255,0.02);
+}
+
+.header-left{
+display:flex;
+flex-direction:column;
+}
+
+.titulo{
+font-size:16px;
+font-weight:600;
+}
+
+.sub{
+font-size:12px;
+opacity:0.7;
+}
+
+/* 🔙 BOTÃO */
+.voltar{
+background:#0f1720;
+border:1px solid rgba(255,255,255,0.1);
+color:#fff;
+padding:8px 14px;
+border-radius:12px;
+cursor:pointer;
+font-size:12px;
+transition:0.2s;
+}
+
+.voltar:hover{
+background:#00ff88;
+color:#000;
+}
+
+/* CARD */
+.card{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:18px;
+border-radius:20px;
+box-shadow:0 10px 40px rgba(0,0,0,0.7);
+border:1px solid rgba(255,255,255,0.05);
+}
+
+h2{
+margin-bottom:10px;
+font-size:17px;
+font-weight:600;
+}
+
+select{
+width:100%;
+padding:12px;
+border-radius:12px;
+border:none;
+margin-bottom:10px;
+background:#0f1720;
+color:#fff;
+}
+
+/* 💰 VALOR */
+#valor{
+font-size:28px;
+font-weight:bold;
+margin-bottom:10px;
+color:#00ff88;
+}
+
+canvas{
+width:100%;
+height:200px;
+display:block;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- 🔥 HEADER COM VOLTAR -->
+<div class="header">
+
+<div class="header-left">
+<div class="titulo">Financeiro</div>
+<div class="sub">Performance do período</div>
+</div>
+
+<button class="voltar" onclick="voltar()">Voltar</button>
+
+</div>
+
+<div class="card">
+
+<h2>Performance Financeira</h2>
+
+<select onchange="render()" id="filtro">
+<option value="7">7 dias</option>
+<option value="30">30 dias</option>
+<option value="365">Anual</option>
+</select>
+
+<div id="valor">R$ 0,00</div>
+
+<canvas id="grafico"></canvas>
+
+</div>
+
+</div>
+
+<script>
+
+/* 🔙 VOLTAR */
+function voltar(){
+window.location.href = "painel.html";
+}
+
+let dados = JSON.parse(localStorage.getItem("barbeiros")) || [];
+let id = localStorage.getItem("barbeiroAtual");
+let b = dados.find(x => x.id == id) || { servicos:[], agendamentos:[] };
+
+function render(){
+
+let dias = Number(document.getElementById("filtro").value);
+let hoje = new Date();
+
+let dadosGrafico = [];
+let total = 0;
+
+for(let i=dias-1;i>=0;i--){
+
+let d = new Date();
+d.setDate(hoje.getDate()-i);
+
+let totalDia = 0;
+
+b.agendamentos.forEach(a=>{
+let da = new Date(a.data);
+
+if(da.toDateString() === d.toDateString() && a.status==="aprovado"){
+let s = b.servicos.find(x=>x.nome===a.servico);
+if(s) totalDia += Number(s.preco||0);
+}
+});
+
+dadosGrafico.push(totalDia);
+total += totalDia;
+}
+
+document.getElementById("valor").innerText =
+"R$ " + total.toFixed(2).replace(".",",");
+
+desenharGrafico(dadosGrafico);
+}
+
+/* GRÁFICO */
+function desenharGrafico(dados){
+
+let canvas = document.getElementById("grafico");
+let ctx = canvas.getContext("2d");
+
+canvas.width = canvas.offsetWidth;
+canvas.height = 200;
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+let paddingY = 20;
+let max = Math.max(...dados,10);
+
+// GRID
+ctx.strokeStyle="rgba(255,255,255,0.05)";
+for(let i=1;i<=4;i++){
+let y = (canvas.height/5)*i;
+ctx.beginPath();
+ctx.moveTo(0,y);
+ctx.lineTo(canvas.width,y);
+ctx.stroke();
+}
+
+let pontos = dados.map((v,i)=>({
+x: (canvas.width/(dados.length-1 || 1))*i,
+y: canvas.height - paddingY - (v/max)*(canvas.height-paddingY*2)
+}));
+
+ctx.beginPath();
+ctx.moveTo(pontos[0].x, pontos[0].y);
+
+for(let i=0;i<pontos.length-1;i++){
+let cpX = (pontos[i].x + pontos[i+1].x)/2;
+ctx.bezierCurveTo(
+cpX, pontos[i].y,
+cpX, pontos[i+1].y,
+pontos[i+1].x, pontos[i+1].y
+);
+}
+
+ctx.shadowColor="rgba(0,255,136,0.4)";
+ctx.shadowBlur=6;
+
+ctx.strokeStyle="#00ff88";
+ctx.lineWidth=2.5;
+ctx.stroke();
+
+ctx.shadowBlur=0;
+
+// preenchimento
+let gradient=ctx.createLinearGradient(0,0,0,canvas.height);
+gradient.addColorStop(0,"rgba(0,255,136,0.25)");
+gradient.addColorStop(1,"rgba(0,255,136,0)");
+
+ctx.lineTo(canvas.width, canvas.height);
+ctx.lineTo(0, canvas.height);
+ctx.closePath();
+
+ctx.fillStyle=gradient;
+ctx.fill();
+}
+
+render();
+
+</script>
+
+</body>
+</html>

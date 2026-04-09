@@ -1,0 +1,244 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Plano</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0b141a;
+color:#fff;
+display:flex;
+justify-content:center;
+}
+
+.container{
+width:100%;
+max-width:480px;
+padding:12px;
+}
+
+/* 🔥 HEADER */
+.header{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:14px 16px;
+border-radius:16px;
+margin-bottom:12px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+border:1px solid rgba(255,255,255,0.05);
+box-shadow:
+0 8px 25px rgba(0,0,0,0.6),
+inset 0 0 10px rgba(255,255,255,0.02);
+}
+
+.header-left{
+display:flex;
+flex-direction:column;
+}
+
+.tituloHeader{
+font-size:16px;
+font-weight:bold;
+}
+
+.sub{
+font-size:12px;
+opacity:0.6;
+}
+
+/* 🔙 BOTÃO VOLTAR */
+.voltar{
+background:#0f1720;
+border:1px solid rgba(255,255,255,0.08);
+color:#fff;
+padding:5px 9px;
+border-radius:9px;
+cursor:pointer;
+font-size:11px;
+transition:0.2s;
+width:auto;
+flex:none;
+}
+
+.voltar:hover{
+background:#00ff88;
+color:#000;
+}
+
+/* 🔥 CARD */
+.card{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:18px;
+border-radius:18px;
+box-shadow:0 10px 40px rgba(0,0,0,0.7);
+border:1px solid rgba(255,255,255,0.05);
+}
+
+/* 🔥 TOPO */
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.status{
+font-size:12px;
+padding:6px 12px;
+border-radius:8px;
+font-weight:bold;
+}
+
+.ativo{
+background:#0f2f24;
+color:#00ff88;
+}
+
+.vencido{
+background:#3a1a1a;
+color:#ff4d4d;
+}
+
+/* 🔥 TEXTO */
+.titulo{
+font-size:14px;
+opacity:0.6;
+margin-top:10px;
+}
+
+.nomePlano{
+font-size:18px;
+font-weight:bold;
+margin-top:4px;
+}
+
+/* 🔥 TEMPO */
+.tempo{
+margin-top:10px;
+font-size:13px;
+opacity:0.7;
+}
+
+/* 🔥 BARRA */
+.barra{
+width:100%;
+height:8px;
+background:#0f1720;
+border-radius:10px;
+margin-top:10px;
+overflow:hidden;
+}
+
+.progresso{
+height:100%;
+background: linear-gradient(90deg,#00ff88,#00c96b);
+width:0%;
+transition:0.5s;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- 🔥 HEADER -->
+<div class="header">
+
+<div class="header-left">
+<div class="tituloHeader">Plano</div>
+<div class="sub">Detalhes da assinatura</div>
+</div>
+
+<button class="voltar" onclick="voltar()">←</button>
+
+</div>
+
+<div class="card">
+
+<div class="top">
+<div style="font-weight:bold;">Plano</div>
+<div id="status" class="status ativo">ATIVO</div>
+</div>
+
+<div class="titulo">Seu plano atual</div>
+<div id="nomePlano" class="nomePlano">Plano Mensal</div>
+
+<div id="tempo" class="tempo"></div>
+
+<div class="barra">
+<div id="progresso" class="progresso"></div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* 🔙 VOLTAR */
+function voltar(){
+window.location.href = "painel.html";
+}
+
+let dados = JSON.parse(localStorage.getItem("barbeiros")) || [];
+let id = localStorage.getItem("barbeiroAtual");
+let b = dados.find(x => x.id == id) || {};
+
+/* CONFIG */
+let diasTotalPlano = 30;
+
+function renderPlano(){
+
+if(!b.expira){
+document.getElementById("status").innerText = "SEM PLANO";
+document.getElementById("status").className = "status vencido";
+document.getElementById("tempo").innerText = "Nenhum plano ativo";
+return;
+}
+
+let agora = new Date();
+let expira = new Date(b.expira);
+
+let diff = expira - agora;
+
+if(diff <= 0){
+
+document.getElementById("status").innerText = "VENCIDO";
+document.getElementById("status").className = "status vencido";
+
+document.getElementById("tempo").innerText = "Plano expirado";
+document.getElementById("progresso").style.width = "0%";
+
+return;
+}
+
+/* TEMPO */
+let dias = Math.floor(diff / 86400000);
+let horas = Math.floor((diff % 86400000)/3600000);
+
+document.getElementById("tempo").innerText =
+`Expira em ${dias} dias e ${horas}h`;
+
+/* PROGRESSO */
+let usado = diasTotalPlano - dias;
+let porcentagem = (usado / diasTotalPlano) * 100;
+
+document.getElementById("progresso").style.width =
+porcentagem + "%";
+}
+
+setInterval(renderPlano,1000);
+renderPlano();
+
+</script>
+
+</body>
+</html>

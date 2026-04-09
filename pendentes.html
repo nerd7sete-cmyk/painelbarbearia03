@@ -1,0 +1,282 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pendentes</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0b141a;
+color:#fff;
+display:flex;
+justify-content:center;
+}
+
+.container{
+width:100%;
+max-width:480px;
+padding:12px;
+}
+
+/* 🔥 HEADER */
+.header{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:16px;
+border-radius:16px;
+margin-bottom:12px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+border:1px solid rgba(255,255,255,0.05);
+box-shadow:
+0 8px 25px rgba(0,0,0,0.6),
+inset 0 0 10px rgba(255,255,255,0.02);
+}
+
+.header-left{
+display:flex;
+flex-direction:column;
+}
+
+.titulo{
+font-size:16px;
+font-weight:bold;
+}
+
+.sub{
+font-size:12px;
+opacity:0.7;
+}
+
+/* 🔙 BOTÃO VOLTAR AJUSTADO */
+.voltar{
+background:#0f1720;
+border:1px solid rgba(255,255,255,0.08);
+color:#fff;
+padding:6px 10px;
+border-radius:10px;
+cursor:pointer;
+font-size:11px;
+transition:0.2s;
+
+/* 🔥 evita ficar gigante */
+width:auto;
+flex:none;
+}
+
+.voltar:hover{
+background:#00ff88;
+color:#000;
+}
+
+/* 🔥 CARD */
+.card{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:16px;
+border-radius:18px;
+box-shadow:0 10px 40px rgba(0,0,0,0.7);
+border:1px solid rgba(255,255,255,0.05);
+cursor:pointer;
+}
+
+/* 🔥 TOPO */
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+/* 🔥 BADGE */
+.badge{
+padding:6px 12px;
+border-radius:10px;
+font-size:12px;
+font-weight:bold;
+}
+
+/* cores */
+.ok{background:#1f3a2f;color:#00ff88;}
+.atencao{background:#bfa100;color:#000;}
+.urgente{background:#a83232;color:#fff;}
+
+/* 🔥 LISTA */
+.lista{
+margin-top:10px;
+display:none;
+flex-direction:column;
+gap:8px;
+}
+
+.item{
+background:#0f1720;
+padding:12px;
+border-radius:12px;
+border:1px solid rgba(255,255,255,0.05);
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+/* 🔥 INFO */
+.linha{
+display:flex;
+justify-content:space-between;
+}
+
+.nome{font-weight:bold;}
+.servico{font-size:12px;opacity:0.7;}
+.valor{color:#00ff88;font-size:13px;font-weight:bold;}
+
+/* 🔥 AÇÕES */
+.acoes{
+display:flex;
+gap:6px;
+}
+
+button{
+flex:1;
+padding:8px;
+border:none;
+border-radius:8px;
+font-size:12px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.aprovar{background:#0f2f24;color:#00ff88;}
+.excluir{background:#3a1a1a;color:#ff4d4d;}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- 🔥 HEADER -->
+<div class="header">
+
+<div class="header-left">
+<div class="titulo">Pendentes</div>
+<div class="sub">Gerencie agendamentos</div>
+</div>
+
+<button class="voltar" onclick="voltar()">←</button>
+
+</div>
+
+<div class="card" onclick="toggleLista()">
+
+<div class="top">
+<div>
+<strong>Agendamentos pendentes</strong>
+<div id="qtdTexto" class="sub">0 pendentes</div>
+</div>
+
+<div id="badge" class="badge">OK</div>
+</div>
+
+<div id="lista" class="lista"></div>
+
+</div>
+
+</div>
+
+<script>
+
+function voltar(){
+window.location.href = "painel.html";
+}
+
+let aberto = false;
+
+let dados = JSON.parse(localStorage.getItem("barbeiros")) || [];
+let id = localStorage.getItem("barbeiroAtual");
+let b = dados.find(x => x.id == id) || { agendamentos:[], servicos:[] };
+
+function save(){
+localStorage.setItem("barbeiros", JSON.stringify(dados));
+}
+
+function aprovar(i, e){
+e.stopPropagation();
+b.agendamentos[i].status="aprovado";
+save();
+render();
+}
+
+function excluir(i, e){
+e.stopPropagation();
+b.agendamentos.splice(i,1);
+save();
+render();
+}
+
+function toggleLista(){
+aberto = !aberto;
+document.getElementById("lista").style.display = aberto ? "flex" : "none";
+}
+
+function render(){
+
+let pendentes = b.agendamentos
+.map((a,i)=>({...a,index:i}))
+.filter(a=>a.status !== "aprovado");
+
+document.getElementById("qtdTexto").innerText =
+`${pendentes.length} pendentes`;
+
+let badge = document.getElementById("badge");
+
+if(pendentes.length === 0){
+badge.className="badge ok";
+badge.innerText="OK";
+}
+else if(pendentes.length <= 2){
+badge.className="badge atencao";
+badge.innerText="Atenção";
+}
+else{
+badge.className="badge urgente";
+badge.innerText="Urgente";
+}
+
+document.getElementById("lista").innerHTML = pendentes.map(a=>{
+
+let s = b.servicos.find(x=>x.nome===a.servico);
+let valor = s ? Number(s.preco).toFixed(2).replace(".",",") : "0,00";
+
+return `
+<div class="item" onclick="event.stopPropagation()">
+
+<div class="linha">
+<div>
+<div class="nome">${a.nome}</div>
+<div class="servico">${a.servico}</div>
+</div>
+
+<div class="valor">R$ ${valor}</div>
+</div>
+
+<div class="acoes">
+<button class="aprovar" onclick="aprovar(${a.index}, event)">✔</button>
+<button class="excluir" onclick="excluir(${a.index}, event)">✖</button>
+</div>
+
+</div>
+`;
+
+}).join("") || "<div style='opacity:0.6;margin-top:10px;'>Nenhum pendente</div>";
+}
+
+render();
+
+</script>
+
+</body>
+</html>

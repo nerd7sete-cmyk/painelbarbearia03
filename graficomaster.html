@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0b141a;
+color:#fff;
+}
+
+.container{
+max-width:480px;
+margin:auto;
+padding:16px;
+}
+
+/* HEADER */
+.topo{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:16px;
+border-radius:16px;
+margin-bottom:16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.titulo{
+font-size:16px;
+font-weight:bold;
+}
+
+.voltar{
+background:#0f1720;
+border:1px solid rgba(255,255,255,0.1);
+color:#fff;
+padding:8px 12px;
+border-radius:10px;
+cursor:pointer;
+}
+
+/* TOTAL */
+.total{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:20px;
+border-radius:16px;
+margin-bottom:16px;
+text-align:center;
+}
+
+.total span{
+font-size:30px;
+color:#00ff88;
+font-weight:bold;
+}
+
+/* FILTROS */
+.filtros{
+display:flex;
+gap:6px;
+overflow-x:auto;
+margin-bottom:16px;
+}
+
+.filtro{
+padding:8px 10px;
+background:#1a242c;
+border-radius:10px;
+font-size:12px;
+cursor:pointer;
+white-space:nowrap;
+}
+
+.ativo{
+background:#00ff88;
+color:#000;
+}
+
+/* CARD */
+.card{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:16px;
+border-radius:16px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="topo">
+<div class="titulo">📊 Faturamento</div>
+<button class="voltar" onclick="voltar()">←</button>
+</div>
+
+<div class="total">
+Faturamento Atual<br>
+<span id="total">R$ 0</span>
+</div>
+
+<div class="filtros">
+<div class="filtro ativo" onclick="setFiltro(7,this)">7 dias</div>
+<div class="filtro" onclick="setFiltro(30,this)">30 dias</div>
+<div class="filtro" onclick="setFiltro(90,this)">3 meses</div>
+<div class="filtro" onclick="setFiltro(180,this)">6 meses</div>
+<div class="filtro" onclick="setFiltro(365,this)">1 ano</div>
+</div>
+
+<div class="card">
+<canvas id="grafico"></canvas>
+</div>
+
+</div>
+
+<script>
+
+let chart;
+let filtroDias = 30;
+
+// 🔥 CONFIG MASTER (VALORES)
+let config = JSON.parse(localStorage.getItem("configMaster")) || {
+valor30:29,
+valor90:79,
+valor365:199
+};
+
+// 🔥 PEGAR VALOR DO PLANO
+function getValor(plano){
+
+if(plano === "Mensal") return config.valor30;
+if(plano === "Trimestral") return config.valor90;
+if(plano === "Anual") return config.valor365;
+
+return 0;
+}
+
+// 🔥 DADOS
+function pegarDados(){
+
+let barbeiros = JSON.parse(localStorage.getItem("barbeiros")) || [];
+
+let hoje = new Date();
+let mapa = {};
+
+for(let i=0;i<filtroDias;i++){
+let d = new Date();
+d.setDate(hoje.getDate() - i);
+
+let key = d.toLocaleDateString();
+mapa[key] = 0;
+}
+
+// 🔥 SOMA FATURAMENTO
+barbeiros.forEach(b=>{
+
+let valor = getValor(b.plano);
+let data = new Date(b.validade || new Date());
+
+let key = data.toLocaleDateString();
+
+if(mapa[key] !== undefined){
+mapa[key] += valor;
+}
+
+});
+
+return mapa;
+}
+
+// 🔥 RENDER
+function render(){
+
+let dados = pegarDados();
+
+let labels = Object.keys(dados).reverse();
+let valores = Object.values(dados).reverse();
+
+let total = valores.reduce((a,b)=>a+b,0);
+
+document.getElementById("total").innerText =
+"R$ " + total.toFixed(2);
+
+// destruir gráfico antigo
+if(chart) chart.destroy();
+
+let ctx = document.getElementById("grafico");
+
+chart = new Chart(ctx, {
+type:"line",
+data:{
+labels:labels,
+datasets:[{
+data:valores,
+borderWidth:2,
+tension:0.4,
+fill:true,
+backgroundColor:"rgba(0,255,136,0.1)",
+borderColor:"#00ff88"
+}]
+},
+options:{
+plugins:{legend:{display:false}},
+scales:{
+x:{display:false},
+y:{display:false}
+}
+}
+});
+
+}
+
+// 🔥 FILTRO
+function setFiltro(dias, el){
+
+filtroDias = dias;
+
+document.querySelectorAll(".filtro")
+.forEach(f=>f.classList.remove("ativo"));
+
+el.classList.add("ativo");
+
+render();
+
+}
+
+function voltar(){
+window.history.back();
+}
+
+// INIT
+render();
+
+</script>
+
+</body>
+</html>

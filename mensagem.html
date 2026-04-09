@@ -1,0 +1,229 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editar Mensagens</title>
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+margin:0;
+font-family:Arial;
+background:#0b141a;
+color:#fff;
+display:flex;
+justify-content:center;
+}
+
+.container{
+width:100%;
+max-width:480px;
+padding:12px;
+}
+
+/* HEADER */
+.header{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:14px 16px;
+border-radius:16px;
+margin-bottom:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border:1px solid rgba(255,255,255,0.05);
+box-shadow:0 8px 25px rgba(0,0,0,0.6);
+}
+
+.header-left{
+display:flex;
+flex-direction:column;
+}
+
+.titulo{
+font-size:16px;
+font-weight:bold;
+}
+
+.sub{
+font-size:12px;
+opacity:0.6;
+}
+
+/* 🔥 BOTÃO VOLTAR AJUSTADO (FIXO E PEQUENO) */
+.voltar{
+background:#0f1720;
+border:1px solid rgba(255,255,255,0.08);
+color:#fff;
+
+width:34px;       /* 🔥 tamanho fixo */
+height:28px;
+
+border-radius:8px;
+
+font-size:12px;
+cursor:pointer;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+padding:0;        /* 🔥 remove crescimento */
+flex:none;        /* 🔥 impede expandir */
+}
+
+.voltar:hover{
+background:#00ff88;
+color:#000;
+}
+
+/* CARD */
+.card{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:16px;
+border-radius:18px;
+border:1px solid rgba(255,255,255,0.05);
+box-shadow:0 10px 40px rgba(0,0,0,0.7);
+}
+
+/* FORM */
+label{
+display:block;
+margin-top:14px;
+font-size:13px;
+font-weight:600;
+}
+
+/* INPUTS */
+textarea, input{
+width:100%;
+margin-top:6px;
+padding:12px;
+border-radius:12px;
+border:none;
+background:#0f1720;
+color:#fff;
+font-size:13px;
+}
+
+textarea{
+min-height:70px;
+resize:none;
+}
+
+/* BOTÃO */
+button{
+width:100%;
+margin-top:18px;
+padding:14px;
+border-radius:12px;
+border:none;
+background:linear-gradient(90deg,#00ff88,#00c96b);
+color:#000;
+font-size:14px;
+font-weight:bold;
+cursor:pointer;
+}
+
+/* SUCESSO */
+.sucesso{
+margin-top:12px;
+text-align:center;
+color:#00ff88;
+display:none;
+font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+<div class="header-left">
+<div class="titulo">Mensagens</div>
+<div class="sub">Configurar automação</div>
+</div>
+<button class="voltar" onclick="voltar()">←</button>
+</div>
+
+<div class="card">
+
+<label>Mensagem de boas-vindas</label>
+<textarea id="boasVindas" placeholder="Ex: Olá, tudo bem? Seja bem-vindo!"></textarea>
+
+<label>Mensagem de ajuda</label>
+<textarea id="ajuda" placeholder="Ex: Vou te ajudar a agendar seu horário"></textarea>
+
+<label>Pedir nome</label>
+<textarea id="nome" placeholder="Ex: Qual seu nome?"></textarea>
+
+<label>Pedir WhatsApp</label>
+<textarea id="whats" placeholder="Ex: Digite seu WhatsApp com DDD"></textarea>
+
+<label>Escolher serviço</label>
+<textarea id="servico" placeholder="Ex: Escolha um serviço abaixo"></textarea>
+
+<label>Endereço do barbeiro</label>
+<input id="endereco" placeholder="Ex: Rua X, nº 123, Centro">
+
+<button onclick="salvar()">Salvar alterações</button>
+
+<div id="sucesso" class="sucesso">Salvo com sucesso</div>
+
+</div>
+
+</div>
+
+<script>
+
+let dados = JSON.parse(localStorage.getItem("barbeiros")) || [];
+let id = localStorage.getItem("barbeiroAtual");
+let b = dados.find(x => x.id == id);
+
+if(!b){
+alert("Barbeiro não encontrado");
+window.location.href = "login.html";
+}
+
+b.mensagens ||= {};
+
+boasVindas.value = b.mensagens.boasVindas || "";
+ajuda.value = b.mensagens.ajuda || "";
+nome.value = b.mensagens.nome || "";
+whats.value = b.mensagens.whats || "";
+servico.value = b.mensagens.servico || "";
+endereco.value = b.endereco || "";
+
+function salvar(){
+b.mensagens = {
+boasVindas: boasVindas.value,
+ajuda: ajuda.value,
+nome: nome.value,
+whats: whats.value,
+servico: servico.value
+};
+
+b.endereco = endereco.value;
+
+localStorage.setItem("barbeiros", JSON.stringify(dados));
+
+let s = document.getElementById("sucesso");
+s.style.display = "block";
+
+setTimeout(()=>{
+s.style.display = "none";
+},2000);
+}
+
+function voltar(){
+window.location.href = "painel.html";
+}
+
+</script>
+
+</body>
+</html>

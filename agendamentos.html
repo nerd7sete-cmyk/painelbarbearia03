@@ -1,0 +1,216 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Agendamentos</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0b141a;
+color:#fff;
+display:flex;
+justify-content:center;
+}
+
+.container{
+width:100%;
+max-width:480px;
+padding:12px;
+}
+
+/* 🔥 CARD */
+.card{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:16px;
+border-radius:18px;
+box-shadow:0 10px 40px rgba(0,0,0,0.7);
+border:1px solid rgba(255,255,255,0.05);
+}
+
+/* 🔥 TOPO */
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+}
+
+select{
+background:#0f1720;
+border:none;
+padding:8px;
+border-radius:8px;
+color:#fff;
+}
+
+/* 🔥 ITEM */
+.item{
+background:#0f1720;
+padding:12px;
+margin-top:8px;
+border-radius:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border:1px solid rgba(255,255,255,0.05);
+}
+
+/* 🔥 INFO */
+.left{
+display:flex;
+flex-direction:column;
+}
+
+.nome{
+font-weight:bold;
+}
+
+.servico{
+font-size:12px;
+color:#aaa;
+}
+
+.valor{
+color:#00ff88;
+font-weight:bold;
+font-size:13px;
+}
+
+/* 🔥 STATUS */
+.status{
+font-size:12px;
+padding:6px 10px;
+border-radius:8px;
+font-weight:bold;
+}
+
+.aprovado{
+background:#0f2f24;
+color:#00ff88;
+}
+
+.pendente{
+background:#2a3942;
+color:#ccc;
+}
+
+.recusado{
+background:#3a1a1a;
+color:#ff4d4d;
+}
+
+/* 🔥 BOTÃO */
+.ver{
+margin-top:10px;
+width:100%;
+padding:10px;
+border:none;
+border-radius:10px;
+background:#00a884;
+color:#fff;
+font-weight:bold;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<div class="top">
+<strong>Agendamentos</strong>
+
+<select id="filtro" onchange="render()">
+<option value="5">Últimos</option>
+<option value="7">7 dias</option>
+<option value="30">30 dias</option>
+</select>
+</div>
+
+<div id="lista"></div>
+
+<button class="ver" onclick="toggleVer()">
+Ver todos
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+let expandido = false;
+
+let dados = JSON.parse(localStorage.getItem("barbeiros")) || [];
+let id = localStorage.getItem("barbeiroAtual");
+let b = dados.find(x => x.id == id) || { agendamentos:[], servicos:[] };
+
+function statusClass(s){
+return s==="aprovado" ? "aprovado" :
+s==="recusado" ? "recusado" : "pendente";
+}
+
+function render(){
+
+let lista = [...b.agendamentos].reverse();
+let filtro = document.getElementById("filtro").value;
+
+let hoje = new Date();
+
+if(filtro !== "5"){
+lista = lista.filter(a=>{
+let d = new Date(a.data);
+let diff = (hoje - d) / 86400000;
+return diff <= filtro;
+});
+}
+
+let mostrar = expandido ? lista : lista.slice(0,5);
+
+document.getElementById("lista").innerHTML = mostrar.map(a=>{
+
+let s = b.servicos.find(x=>x.nome===a.servico);
+let valor = s ? Number(s.preco).toFixed(2) : "0.00";
+
+return `
+<div class="item">
+
+<div class="left">
+<div class="nome">${a.nome}</div>
+<div class="servico">${a.servico}</div>
+<div class="valor">R$ ${valor}</div>
+</div>
+
+<div class="status ${statusClass(a.status)}">
+${a.status || "pendente"}
+</div>
+
+</div>
+`;
+
+}).join("");
+
+}
+
+function toggleVer(){
+expandido = !expandido;
+
+document.querySelector(".ver").innerText =
+expandido ? "Ver menos" : "Ver todos";
+
+render();
+}
+
+render();
+
+</script>
+
+</body>
+</html>

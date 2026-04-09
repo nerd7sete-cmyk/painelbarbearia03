@@ -1,0 +1,250 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Barbeiros</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0b141a;
+color:#fff;
+display:flex;
+justify-content:center;
+}
+
+.container{
+width:100%;
+max-width:480px;
+padding:16px;
+}
+
+/* HEADER */
+.header{
+font-size:18px;
+font-weight:bold;
+margin-bottom:12px;
+}
+
+/* FILTROS */
+.filtros{
+display:flex;
+gap:8px;
+margin-bottom:12px;
+}
+
+.filtro{
+flex:1;
+padding:8px;
+border-radius:10px;
+background:#1a242c;
+text-align:center;
+font-size:12px;
+cursor:pointer;
+border:1px solid rgba(255,255,255,0.05);
+}
+
+.ativoFiltro{
+background:#00ff88;
+color:#000;
+}
+
+/* CARD */
+.card{
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:14px;
+border-radius:14px;
+margin-bottom:10px;
+border:1px solid rgba(255,255,255,0.05);
+}
+
+/* TOP */
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.nome{
+font-weight:bold;
+}
+
+.status{
+font-size:11px;
+padding:4px 8px;
+border-radius:8px;
+}
+
+.ativo{ background:#00ff8830;color:#00ff88; }
+.vencido{ background:#ff4d4d30;color:#ff4d4d; }
+
+/* INFO */
+.info{
+font-size:12px;
+opacity:0.7;
+margin-top:4px;
+}
+
+/* AÇÕES */
+.actions{
+display:flex;
+gap:6px;
+margin-top:10px;
+}
+
+.btn{
+flex:1;
+padding:8px;
+border:none;
+border-radius:10px;
+font-size:11px;
+cursor:pointer;
+}
+
+.whats{ background:#25D366;color:#fff; }
+.entrar{ background:#00ff88;color:#000; }
+.renovar{ background:#ffaa00;color:#000; }
+.excluir{ background:#ff4d4d;color:#fff; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">💈 Barbeiros</div>
+
+<div class="filtros">
+<div class="filtro ativoFiltro" onclick="filtrar('todos',this)">Todos</div>
+<div class="filtro" onclick="filtrar('ativos',this)">Ativos</div>
+<div class="filtro" onclick="filtrar('vencidos',this)">Vencidos</div>
+</div>
+
+<div id="lista"></div>
+
+</div>
+
+<script>
+
+let dados = JSON.parse(localStorage.getItem("barbeiros")) || [];
+let tipoFiltro = "todos";
+
+function render(){
+
+let lista = document.getElementById("lista");
+lista.innerHTML = "";
+
+let hoje = new Date();
+
+let filtrados = dados.filter(b=>{
+
+let validade = new Date(b.validade || 0);
+let ativo = validade > hoje;
+
+if(tipoFiltro === "ativos") return ativo;
+if(tipoFiltro === "vencidos") return !ativo;
+
+return true;
+
+});
+
+if(filtrados.length === 0){
+lista.innerHTML = "<p style='opacity:0.6'>Nenhum encontrado</p>";
+return;
+}
+
+filtrados.forEach(b=>{
+
+let validade = new Date(b.validade || 0);
+let ativo = validade > hoje;
+
+let card = document.createElement("div");
+card.className = "card";
+
+card.innerHTML = `
+<div class="top">
+<div class="nome">${b.nome}</div>
+<div class="status ${ativo ? "ativo" : "vencido"}">
+${ativo ? "Ativo" : "Vencido"}
+</div>
+</div>
+
+<div class="info">📞 ${b.whatsapp}</div>
+<div class="info">💎 ${b.plano || "-"}</div>
+<div class="info">📅 ${b.validade ? validade.toLocaleDateString() : "-"}</div>
+
+<div class="actions">
+<button class="btn whats" onclick="whats('${b.whatsapp}')">Whats</button>
+<button class="btn entrar" onclick="entrar('${b.id}')">Entrar</button>
+<button class="btn renovar" onclick="renovar('${b.id}')">Renovar</button>
+<button class="btn excluir" onclick="excluir('${b.id}')">Excluir</button>
+</div>
+`;
+
+lista.appendChild(card);
+
+});
+
+}
+
+// FILTRO
+function filtrar(tipo, el){
+tipoFiltro = tipo;
+
+document.querySelectorAll(".filtro").forEach(f=>f.classList.remove("ativoFiltro"));
+el.classList.add("ativoFiltro");
+
+render();
+}
+
+// WHATS
+function whats(n){
+window.open(`https://wa.me/${n}`);
+}
+
+// ENTRAR
+function entrar(id){
+localStorage.setItem("barbeiroAtual", id);
+window.location.href = "painel.html";
+}
+
+// RENOVAR (🔥 TOP)
+function renovar(id){
+
+let dias = prompt("Quantos dias adicionar? (ex: 30)");
+
+if(!dias) return;
+
+let b = dados.find(x=>x.id == id);
+
+let nova = new Date(b.validade || new Date());
+nova.setDate(nova.getDate() + Number(dias));
+
+b.validade = nova;
+
+localStorage.setItem("barbeiros", JSON.stringify(dados));
+
+alert("Plano renovado!");
+render();
+}
+
+// EXCLUIR
+function excluir(id){
+
+if(!confirm("Excluir barbeiro?")) return;
+
+dados = dados.filter(b=>b.id != id);
+localStorage.setItem("barbeiros", JSON.stringify(dados));
+
+render();
+}
+
+render();
+
+</script>
+
+</body>
+</html>

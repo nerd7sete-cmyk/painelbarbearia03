@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HypeBarber - Login</title>
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+height:100vh;
+background: radial-gradient(circle at top, #111b21, #0b141a);
+display:flex;
+justify-content:center;
+align-items:center;
+font-family:Arial;
+color:#fff;
+}
+
+/* BOX */
+.box {
+background: linear-gradient(145deg,#1a242c,#111b21);
+padding:30px;
+border-radius:18px;
+width:100%;
+max-width:360px;
+box-shadow:0 15px 40px rgba(0,0,0,0.7);
+animation:fade 0.4s ease;
+position:relative;
+overflow:hidden;
+border:1px solid rgba(255,255,255,0.05);
+}
+
+/* 🔥 GLOW */
+.box::before{
+content:"";
+position:absolute;
+top:-50%;
+left:-50%;
+width:200%;
+height:200%;
+background: radial-gradient(circle, rgba(0,255,150,0.06), transparent 60%);
+animation: brilho 8s linear infinite;
+pointer-events:none;
+z-index:0;
+}
+
+.box *{
+position:relative;
+z-index:1;
+}
+
+@keyframes brilho{
+0%{transform: rotate(0deg);}
+100%{transform: rotate(360deg);}
+}
+
+@keyframes fade {
+from { opacity:0; transform:translateY(20px); }
+to { opacity:1; transform:translateY(0); }
+}
+
+h1 {
+text-align:center;
+margin-bottom:5px;
+font-size:22px;
+}
+
+.logo{
+text-align:center;
+margin-bottom:20px;
+font-size:13px;
+color:#888;
+}
+
+.input-group {
+margin-bottom:15px;
+}
+
+input {
+width:100%;
+padding:13px;
+border-radius:12px;
+border:1px solid rgba(255,255,255,0.05);
+background:#0b141a;
+color:#fff;
+font-size:14px;
+}
+
+input:focus {
+outline:none;
+border:1px solid #00ff88;
+box-shadow:0 0 8px rgba(0,255,136,0.3);
+}
+
+button {
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+background:linear-gradient(90deg,#00ff88,#00c96b);
+color:#000;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover {
+transform:translateY(-2px);
+box-shadow:0 10px 25px rgba(0,255,136,0.3);
+}
+
+.erro {
+margin-top:10px;
+font-size:13px;
+color:#ff4d4d;
+text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h1>HypeBarber</h1>
+<div class="logo">Acesse seu painel profissional</div>
+
+<div class="input-group">
+<input id="email" placeholder="Digite seu email">
+</div>
+
+<div class="input-group">
+<input id="senha" type="password" placeholder="Digite sua senha">
+</div>
+
+<button onclick="logar()">Entrar</button>
+
+<div class="erro" id="erro"></div>
+
+</div>
+
+<script>
+
+function logar(){
+
+let email = document.getElementById("email").value.trim();
+let senha = document.getElementById("senha").value.trim();
+let erro = document.getElementById("erro");
+
+//////////////////////////////////////////////////
+// 🔥 LOGIN MASTER
+//////////////////////////////////////////////////
+
+if(email === "nerd7sete@gmail.com" && senha === "Amargosa171"){
+localStorage.setItem("masterLogado", "true");
+window.location.href = "master.html";
+return;
+}
+
+//////////////////////////////////////////////////
+// 🔥 LOGIN BARBEIRO FIXO (NOVO)
+//////////////////////////////////////////////////
+
+if(email === "nerd7sete@gmail.com" && senha === "1234"){
+localStorage.setItem("barbeiroAtual", "barbeiro_fixo");
+window.location.href = "painel.html";
+return;
+}
+
+//////////////////////////////////////////////////
+// 🔥 LOGIN BARBEIRO (ORIGINAL)
+//////////////////////////////////////////////////
+
+let barbeiros = JSON.parse(localStorage.getItem("barbeiros")) || [];
+
+let barbeiro = barbeiros.find(b => b.email === email && b.senha === senha);
+
+if(!barbeiro){
+erro.innerText = "Email ou senha inválidos";
+return;
+}
+
+localStorage.setItem("barbeiroAtual", barbeiro.id);
+window.location.href = "painel.html";
+
+}
+
+</script>
+
+</body>
+</html>
