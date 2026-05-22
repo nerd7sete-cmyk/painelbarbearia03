@@ -1,11 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>Magalu</title>
+<title>Entrega - Magalu</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,487 +27,426 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 }
 
 body{
-    background:#f4f5f7;
+    background:#f5f5f5;
     font-family:'Inter',sans-serif;
-    color:#111827;
+    color:#222;
 }
 
 /* HEADER */
 
-header{
-    background:#0086ff;
-    padding:16px 24px 20px;
-    position:sticky;
-    top:0;
-    z-index:999;
-    box-shadow:0 4px 20px rgba(0,0,0,0.08);
-}
-
 .top-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+    background:#0086ff;
+    padding-top:18px;
+    box-shadow:0 2px 12px rgba(0,0,0,.08);
 }
 
-.left-area{
-    display:flex;
-    align-items:center;
-    gap:20px;
-}
-
-.menu-btn{
-    background:none;
-    border:none;
-    color:#fff;
-    font-size:34px;
-    cursor:pointer;
+.logo-area{
+    padding:0 18px 14px;
 }
 
 .logo{
     color:#fff;
-    font-size:48px;
+    font-size:54px;
     font-weight:900;
-    letter-spacing:-3px;
-    text-transform:lowercase;
-    cursor:pointer;
+    letter-spacing:-4px;
 }
 
-.right-area{
-    display:flex;
-    align-items:center;
-    gap:22px;
-}
-
-.header-icon{
-    color:#fff;
-    font-size:28px;
-    cursor:pointer;
-}
-
-/* SEARCH */
-
-.search-box{
-    margin-top:18px;
-    background:#fff;
-    height:60px;
-    border-radius:18px;
-    display:flex;
-    align-items:center;
-    padding:0 20px;
-    gap:14px;
-    box-shadow:0 4px 14px rgba(0,0,0,0.08);
-}
-
-.search-box i{
-    color:#9ca3af;
-    font-size:18px;
-}
-
-.search-box input{
+.rainbow{
     width:100%;
-    border:none;
-    outline:none;
-    font-size:17px;
-    font-weight:600;
-    background:transparent;
+    height:6px;
+    background:linear-gradient(
+        90deg,
+        #ffd500,
+        #ff7b00,
+        #ff0066,
+        #7a2cff,
+        #00bfff,
+        #41ff00
+    );
 }
 
-/* CEP */
+/* STEPS */
 
-.cep-box{
-    margin-top:14px;
-    color:#fff;
+.steps{
+    background:#fff;
+    padding:20px 10px 16px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:5px;
+    border-bottom:1px solid #ececec;
+}
+
+.step{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-width:66px;
+    color:#999;
+    font-size:12px;
+    font-weight:700;
+}
+
+.circle{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    border:2px solid #ccc;
     display:flex;
     align-items:center;
-    gap:10px;
-    font-size:15px;
-    font-weight:600;
+    justify-content:center;
+    background:#fff;
+    font-size:17px;
+    margin-bottom:6px;
+}
+
+.line{
+    width:34px;
+    height:2px;
+    background:#ccc;
+    margin-bottom:26px;
+}
+
+.step.done{
+    color:#59cc23;
+}
+
+.step.done .circle{
+    border-color:#59cc23;
+    color:#59cc23;
+}
+
+.step.active{
+    color:#0086ff;
+}
+
+.step.active .circle{
+    border-color:#0086ff;
+    color:#0086ff;
 }
 
 /* CONTAINER */
 
 .container{
-    max-width:1400px;
-    margin:auto;
-    padding:30px 22px;
+    padding:18px 14px 30px;
 }
 
-/* GRID */
+/* TITLE */
 
-.product-grid{
-    display:grid;
-    grid-template-columns:1fr 500px;
-    gap:28px;
-    align-items:start;
+.page-title{
+    font-size:24px;
+    font-weight:900;
+    margin-bottom:18px;
+    color:#222;
 }
 
-/* LEFT */
+/* ADDRESS */
 
-.left-content{
+.address-box{
     background:#fff;
-    border-radius:28px;
-    padding:30px;
-    box-shadow:
-    0 2px 8px rgba(0,0,0,0.03),
-    0 14px 30px rgba(0,0,0,0.04);
-}
-
-.main-image{
-    width:100%;
-    height:620px;
-    object-fit:contain;
     border-radius:22px;
-    background:#fff;
+    padding:20px;
+    box-shadow:
+    0 2px 10px rgba(0,0,0,.03),
+    0 10px 24px rgba(0,0,0,.04);
 }
 
-/* THUMB */
-
-.thumbnails{
+.address-header{
     display:flex;
+    align-items:center;
+    justify-content:space-between;
     gap:14px;
-    margin-top:24px;
-    flex-wrap:wrap;
 }
 
-.thumb{
-    width:96px;
-    height:96px;
-    border-radius:18px;
-    border:2px solid #e5e7eb;
-    overflow:hidden;
-    cursor:pointer;
-    background:#fff;
-    transition:0.2s;
-}
-
-.thumb.active{
-    border:3px solid #0086ff;
-    box-shadow:0 8px 20px rgba(0,134,255,0.18);
-}
-
-.thumb img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-/* RIGHT */
-
-.right-content{
-    background:#fff;
-    border-radius:28px;
-    padding:34px;
-    position:sticky;
-    top:120px;
-    box-shadow:
-    0 2px 8px rgba(0,0,0,0.03),
-    0 14px 30px rgba(0,0,0,0.04);
-}
-
-.product-title{
-    font-size:38px;
-    line-height:50px;
-    font-weight:900;
-    letter-spacing:-1px;
-}
-
-.product-subtitle{
-    margin-top:18px;
-    color:#6b7280;
-    line-height:32px;
-    font-size:17px;
-}
-
-/* STORAGE */
-
-.storage-title{
-    margin-top:30px;
-    color:#6b7280;
-    font-size:16px;
-    font-weight:700;
-}
-
-.storage-options{
-    margin-top:14px;
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-}
-
-.storage-btn{
-    min-width:120px;
-    height:54px;
-    border-radius:999px;
-    border:2px solid #d1d5db;
-    background:#fff;
-    color:#374151;
-    font-size:16px;
-    font-weight:800;
-    cursor:pointer;
-    transition:0.2s;
-}
-
-.storage-btn.active{
-    background:#0086ff;
-    color:#fff;
-    border:none;
-    box-shadow:0 10px 22px rgba(0,134,255,0.22);
-}
-
-/* SELLER */
-
-.seller{
-    margin-top:24px;
-    color:#6b7280;
-    font-size:17px;
-}
-
-.seller strong{
-    color:#111827;
-}
-
-/* PRICE */
-
-.price-section{
-    margin-top:34px;
-}
-
-.old-price{
-    color:#9ca3af;
-    font-size:18px;
-    text-decoration:line-through;
-}
-
-.price-row{
-    margin-top:10px;
+.address-left{
     display:flex;
     align-items:center;
-    gap:12px;
-    flex-wrap:wrap;
+    gap:14px;
 }
 
-.price{
-    font-size:68px;
-    font-weight:900;
-    letter-spacing:-4px;
-    color:#111827;
-}
-
-.pix{
-    font-size:22px;
-    font-weight:800;
-}
-
-.off{
-    background:#dcfce7;
-    color:#166534;
-    padding:8px 14px;
-    border-radius:12px;
-    font-size:15px;
-    font-weight:800;
-}
-
-.installments{
-    margin-top:20px;
-    color:#374151;
-    line-height:34px;
-    font-size:18px;
-}
-
-.installments strong{
-    background:#dcfce7;
-    color:#166534;
-    padding:4px 8px;
-    border-radius:8px;
-}
-
-.payment-link{
-    margin-top:22px;
+.location-icon{
+    min-width:52px;
+    width:52px;
+    height:52px;
+    border-radius:16px;
+    background:#eef6ff;
     color:#0086ff;
-    font-size:18px;
-    font-weight:800;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    cursor:pointer;
-}
-
-/* SHIPPING */
-
-.shipping-box{
-    width:100%;
-    height:76px;
-    border-radius:20px;
-    background:#f4f5f7;
-    display:flex;
-    align-items:center;
-    padding:0 24px;
-    gap:16px;
-    color:#374151;
-    font-size:20px;
-    font-weight:700;
-    margin-top:30px;
-}
-
-/* BUTTONS */
-
-.buttons{
-    margin-top:30px;
-    display:flex;
-    flex-direction:column;
-    gap:16px;
-}
-
-.cart-btn{
-    width:100%;
-    height:72px;
-    border:none;
-    border-radius:22px;
-    background:linear-gradient(
-        180deg,
-        #00d11f,
-        #00b71b
-    );
-    color:#fff;
-    font-size:22px;
-    font-weight:900;
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:14px;
-    cursor:pointer;
-    box-shadow:0 12px 24px rgba(0,192,26,0.24);
-    transition:0.18s;
-}
-
-.buy-btn{
-    width:100%;
-    height:72px;
-    border-radius:22px;
-    border:3px solid #00c01a;
-    background:#fff;
-    color:#00a91a;
     font-size:22px;
-    font-weight:900;
+}
+
+.address-info span{
+    color:#8d8d8d;
+    font-size:13px;
+    font-weight:600;
+}
+
+.address-info h3{
+    margin-top:3px;
+    font-size:18px;
+    color:#222;
+    font-weight:800;
+}
+
+.change-btn{
+    border:none;
+    background:#eef6ff;
+    color:#0086ff;
+    padding:12px 16px;
+    border-radius:14px;
+    font-size:14px;
+    font-weight:800;
     cursor:pointer;
-    transition:0.18s;
 }
 
-.cart-btn:hover,
-.buy-btn:hover{
-    transform:translateY(-2px);
+.address-card{
+    margin-top:18px;
+    border:1px solid #ededed;
+    border-radius:18px;
+    padding:18px;
+    background:#fafafa;
 }
 
-.cart-btn:active,
-.buy-btn:active{
-    transform:scale(0.98);
-}
-
-/* BENEFITS */
-
-.benefits{
-    margin-top:36px;
-}
-
-.benefit{
+.client-box{
     display:flex;
     align-items:flex-start;
-    justify-content:space-between;
-    margin-bottom:30px;
+    gap:14px;
 }
 
-.benefit:last-child{
-    margin-bottom:0;
-}
-
-.benefit-left{
+.client-icon{
+    width:46px;
+    height:46px;
+    border-radius:14px;
+    background:#0086ff;
+    color:#fff;
     display:flex;
-    gap:16px;
-}
-
-.benefit-icon{
-    color:#0086ff;
-    font-size:28px;
-    margin-top:4px;
-}
-
-.benefit-text h4{
+    align-items:center;
+    justify-content:center;
     font-size:18px;
+}
+
+.client-data{
+    flex:1;
+}
+
+.client-data h4{
+    font-size:17px;
+    color:#222;
+    font-weight:800;
     margin-bottom:6px;
 }
 
-.benefit-text p{
-    color:#6b7280;
-    line-height:28px;
-    font-size:16px;
+.client-data p{
+    color:#5e5e5e;
+    font-size:14px;
+    line-height:25px;
 }
 
-.arrow{
+/* ALERT */
+
+.alert{
+    margin-top:18px;
+    background:#fff8e6;
+    border:1px solid #f0d26b;
+    border-radius:14px;
+    padding:14px 16px;
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+}
+
+.alert i{
+    color:#c8a000;
+    font-size:18px;
+    margin-top:1px;
+}
+
+.alert p{
+    color:#7a6100;
+    font-size:13px;
+    line-height:22px;
+    font-weight:700;
+}
+
+/* DELIVERY */
+
+.delivery-card{
+    background:#fff;
+    margin-top:18px;
+    border-radius:22px;
+    padding:20px;
+    box-shadow:
+    0 2px 10px rgba(0,0,0,.03),
+    0 10px 24px rgba(0,0,0,.04);
+}
+
+.delivery-title{
+    font-size:18px;
+    font-weight:900;
+    margin-bottom:18px;
+}
+
+.product-name{
+    color:#333;
+    font-size:16px;
+    line-height:28px;
+    font-weight:600;
+}
+
+.seller{
+    margin-top:14px;
+    color:#777;
+    font-size:14px;
+    line-height:24px;
+}
+
+.seller strong{
+    color:#222;
+}
+
+.magalu{
     color:#0086ff;
-    font-size:22px;
+    font-weight:900;
+}
+
+/* OPTION */
+
+.option{
+    margin-top:22px;
+    border:2px solid #18b6ff;
+    border-radius:18px;
+    padding:18px;
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+    align-items:flex-start;
+}
+
+.option-left{
+    display:flex;
+    gap:14px;
+}
+
+.radio{
+    width:26px;
+    height:26px;
+    border-radius:50%;
+    border:3px solid #18b6ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-top:2px;
+}
+
+.radio::after{
+    content:"";
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#18b6ff;
+}
+
+.delivery-info h3{
+    font-size:17px;
+    line-height:26px;
+    color:#222;
+    font-weight:800;
+}
+
+.delivery-info p{
+    margin-top:4px;
+    color:#888;
+    font-size:13px;
+    font-weight:600;
+}
+
+.price{
+    color:#0086ff;
+    font-size:21px;
+    font-weight:900;
+    white-space:nowrap;
+}
+
+/* BUTTON */
+
+.continue-btn{
+    width:100%;
+    height:64px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(
+        180deg,
+        #64da2f,
+        #59c923
+    );
+    color:#fff;
+    font-size:21px;
+    font-weight:800;
+    margin-top:24px;
+    cursor:pointer;
+    box-shadow:0 10px 22px rgba(89,201,35,.25);
+}
+
+.continue-btn:active{
+    transform:scale(.98);
+}
+
+/* INFO */
+
+.info-text{
+    margin-top:18px;
+    text-align:center;
+    color:#8a8a8a;
+    font-size:13px;
+    line-height:24px;
+}
+
+/* FOOTER */
+
+.footer{
+    margin-top:34px;
+    padding:34px 18px 70px;
+    background:#efefef;
+    text-align:center;
+}
+
+.footer-top{
+    margin-bottom:20px;
+    color:#666;
+    font-size:15px;
+}
+
+.footer-top a{
+    color:#666;
+    font-weight:800;
+}
+
+.footer p{
+    color:#8d8d8d;
+    font-size:13px;
+    line-height:26px;
 }
 
 /* RESPONSIVO */
 
-@media(max-width:1100px){
-
-    .product-grid{
-        grid-template-columns:1fr;
-    }
-
-    .right-content{
-        position:relative;
-        top:0;
-    }
-
-}
-
 @media(max-width:700px){
 
-    header{
-        padding:16px 18px 20px;
-    }
-
-    .container{
-        padding:14px;
-    }
-
     .logo{
-        font-size:40px;
+        font-size:46px;
     }
 
-    .menu-btn{
-        font-size:28px;
+    .page-title{
+        font-size:22px;
     }
 
-    .header-icon{
-        font-size:24px;
-    }
-
-    .main-image{
-        height:360px;
-    }
-
-    .product-title{
-        font-size:30px;
-        line-height:40px;
+    .option{
+        flex-direction:column;
     }
 
     .price{
-        font-size:54px;
-    }
-
-    .left-content,
-    .right-content{
-        padding:22px;
-        border-radius:22px;
-    }
-
-    .cart-btn,
-    .buy-btn{
-        height:64px;
-        font-size:19px;
-        border-radius:18px;
+        margin-left:40px;
     }
 
 }
@@ -518,305 +457,235 @@ header{
 
 <body>
 
-<header>
+<!-- HEADER -->
 
-    <div class="top-header">
+<div class="top-header">
 
-        <div class="left-area">
+    <div class="logo-area">
 
-            <button class="menu-btn">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-
-            <div class="logo" onclick="goToMagalu()">
-                Magalu
-            </div>
-
-        </div>
-
-        <div class="right-area">
-
-            <i class="fa-regular fa-heart header-icon"></i>
-
-            <i class="fa-solid fa-bag-shopping header-icon"></i>
-
-            <i class="fa-regular fa-circle-user header-icon"></i>
-
+        <div class="logo">
+            magalu
         </div>
 
     </div>
 
-    <!-- PESQUISA -->
+    <div class="rainbow"></div>
 
-    <div class="search-box">
+</div>
 
-        <i class="fa-solid fa-magnifying-glass"></i>
+<!-- ETAPAS -->
 
-        <input
-        type="text"
-        id="searchInput"
-        placeholder="Buscar produtos na Magalu"
-        />
+<div class="steps">
 
-    </div>
+    <div class="step done">
 
-    <div class="cep-box">
+        <div class="circle">
+            <i class="fa-solid fa-bag-shopping"></i>
+        </div>
 
-        <i class="fa-solid fa-location-dot"></i>
-
-        Digite seu CEP
+        Sacola
 
     </div>
 
-</header>
+    <div class="line"></div>
+
+    <div class="step active">
+
+        <div class="circle">
+            <i class="fa-solid fa-truck"></i>
+        </div>
+
+        Entrega
+
+    </div>
+
+    <div class="line"></div>
+
+    <div class="step">
+
+        <div class="circle">
+            <i class="fa-regular fa-credit-card"></i>
+        </div>
+
+        Pagamento
+
+    </div>
+
+    <div class="line"></div>
+
+    <div class="step">
+
+        <div class="circle">
+            <i class="fa-regular fa-rectangle-list"></i>
+        </div>
+
+        Revisão
+
+    </div>
+
+</div>
+
+<!-- CONTAINER -->
 
 <div class="container">
 
-    <div class="product-grid">
+    <div class="page-title">
+        Opções de entrega
+    </div>
 
-        <!-- ESQUERDA -->
+    <!-- ENDEREÇO -->
 
-        <div class="left-content">
+    <div class="address-box">
 
-            <img
-            src="COLE_O_LINK_DA_FOTO_AQUI"
-            class="main-image"
-            id="mainImage"
-            />
+        <div class="address-header">
 
-            <div class="thumbnails">
+            <div class="address-left">
 
-                <div class="thumb active">
+                <div class="location-icon">
 
-                    <img
-                    src="COLE_O_LINK_DA_FOTO_1_AQUI"
-                    onclick="changeImage(this)"
-                    />
+                    <i class="fa-solid fa-location-dot"></i>
 
                 </div>
 
-                <div class="thumb">
+                <div class="address-info">
 
-                    <img
-                    src="https://i.ibb.co/fVsYyTvv/Whats-App-Image-2026-05-21-at-23-15-48.jpg"
-                    onclick="changeImage(this)"
-                    />
+                    <span>
+                        Entregar em
+                    </span>
+
+                    <h3 id="cidadeEstado">
+                        Detectando localização...
+                    </h3>
+
+                </div>
+
+            </div>
+
+            <button
+            class="change-btn"
+            onclick="alterarEndereco()">
+
+                Alterar
+
+            </button>
+
+        </div>
+
+        <!-- CARD -->
+
+        <div class="address-card">
+
+            <div class="client-box">
+
+                <div class="client-icon">
+
+                    <i class="fa-solid fa-house"></i>
 
                 </div>
 
-                <div class="thumb">
+                <div class="client-data">
 
-                    <img
-                    src="https://i.ibb.co/0RG0XBhF/Whats-App-Image-2026-05-21-at-23-15-48-1.jpg"
-                    onclick="changeImage(this)"
-                    />
+                    <h4 id="nomeCliente">
+                        Cliente Magalu
+                    </h4>
+
+                    <p id="enderecoCompleto">
+
+                        Detectando endereço automaticamente...
+
+                    </p>
 
                 </div>
+
+            </div>
+
+            <!-- ALERT -->
+
+            <div class="alert">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <p>
+
+                    Revise seu endereço antes
+                    de continuar a compra.
+
+                </p>
 
             </div>
 
         </div>
 
-        <!-- DIREITA -->
+    </div>
 
-        <div class="right-content">
+    <!-- ENTREGA -->
 
-            <div class="product-title">
-                iPhone 14 Pro Max
-            </div>
+    <div class="delivery-card">
 
-            <div class="product-subtitle">
+        <div class="delivery-title">
+            Entrega 01 de 01
+        </div>
 
-                O iPhone 14 Pro Max entrega desempenho premium,
-                Dynamic Island, câmera profissional de 48MP,
-                acabamento sofisticado e bateria de longa duração.
+        <div class="product-name">
 
-            </div>
+            iPhone 14 Pro Max Apple
+            256GB Deep Purple
 
-            <div class="storage-title">
-                Armazenamento interno
-            </div>
+        </div>
 
-            <div class="storage-options">
+        <div class="seller">
 
-                <button class="storage-btn active">
-                    256GB
-                </button>
+            Vendido por
+            <strong>Magalu</strong><br>
 
-                <button class="storage-btn">
-                    512GB
-                </button>
+            Entregue por
+            <span class="magalu">magalu</span>
 
-            </div>
+        </div>
 
-            <div class="seller">
-                Vendido e entregue por <strong>Magalu</strong>
-            </div>
+        <!-- OPÇÃO -->
 
-            <div class="price-section">
+        <div class="option">
 
-                <div class="old-price">
-                    R$ 7.599,00
-                </div>
+            <div class="option-left">
 
-                <div class="price-row">
+                <div class="radio"></div>
 
-                    <div class="price">
-                        R$ 6.199
-                    </div>
+                <div class="delivery-info">
 
-                    <div class="pix">
-                        no Pix
-                    </div>
+                    <h3>
+                        Receba até sexta-feira,
+                        26 de junho
+                    </h3>
 
-                    <div class="off">
-                        10% OFF
-                    </div>
-
-                </div>
-
-                <div class="installments">
-
-                    ou R$ 6.887,78 em 10x de R$ 688,78 sem juros
-
-                    <br><br>
-
-                    ou <strong>21x de R$ 327,99 sem juros</strong>
-                    no Cartão Magalu
-
-                </div>
-
-                <div class="payment-link">
-
-                    Ver opções de pagamento
-
-                    <i class="fa-solid fa-chevron-right"></i>
+                    <p>
+                        Para pagamentos aprovados hoje
+                    </p>
 
                 </div>
 
             </div>
 
-            <div class="shipping-box">
-
-                <i class="fa-solid fa-location-dot"></i>
-
-                Calcular frete e prazo
-
+            <div class="price">
+                R$ 39,90
             </div>
 
-            <!-- BOTÕES -->
+        </div>
 
-            <div class="buttons">
+        <!-- BOTÃO -->
 
-                <button class="cart-btn">
+        <button
+        class="continue-btn"
+        onclick="goPagamento()">
 
-                    <i class="fa-solid fa-bag-shopping"></i>
+            Continuar
 
-                    Adicionar à sacola
+        </button>
 
-                </button>
+        <div class="info-text">
 
-                <!-- ABRIR GARANTIA -->
-
-                <button
-                class="buy-btn"
-                onclick="openGarantia()">
-
-                    Comprar agora
-
-                </button>
-
-            </div>
-
-            <!-- BENEFÍCIOS -->
-
-            <div class="benefits">
-
-                <div class="benefit">
-
-                    <div class="benefit-left">
-
-                        <div class="benefit-icon">
-                            <i class="fa-solid fa-truck-fast"></i>
-                        </div>
-
-                        <div class="benefit-text">
-
-                            <h4>
-                                Entrega Full
-                            </h4>
-
-                            <p>
-                                Entrega rápida, frete barato e mais segurança para você.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <div class="arrow">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </div>
-
-                </div>
-
-                <div class="benefit">
-
-                    <div class="benefit-left">
-
-                        <div class="benefit-icon">
-                            <i class="fa-solid fa-shield-halved"></i>
-                        </div>
-
-                        <div class="benefit-text">
-
-                            <h4>
-                                Compra Garantida
-                            </h4>
-
-                            <p>
-                                Garantia total da compra até a entrega.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <div class="arrow">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </div>
-
-                </div>
-
-                <div class="benefit">
-
-                    <div class="benefit-left">
-
-                        <div class="benefit-icon">
-                            <i class="fa-solid fa-rotate-left"></i>
-                        </div>
-
-                        <div class="benefit-text">
-
-                            <h4>
-                                Devolução Gratuita
-                            </h4>
-
-                            <p>
-                                Devolução gratuita em até 7 dias após receber.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <div class="arrow">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </div>
-
-                </div>
-
-            </div>
+            Os prazos de entrega começam
+            após a confirmação do pagamento.
 
         </div>
 
@@ -824,59 +693,216 @@ header{
 
 </div>
 
+<!-- FOOTER -->
+
+<div class="footer">
+
+    <div class="footer-top">
+
+        <i class="fa-solid fa-headset"></i>
+
+        Compre pelo
+        <a href="#">
+            chat online
+        </a>
+
+    </div>
+
+    <p>
+
+        Preços e condições exclusivos
+        para compras via internet.
+
+        <br><br>
+
+        Vendas sujeitas à análise
+        e confirmação de dados.
+
+        <br><br>
+
+        Magazine Luiza -
+        Todos os direitos reservados
+
+    </p>
+
+</div>
+
 <script>
 
-/* TROCAR FOTO */
+/* ELEMENTOS */
 
-function changeImage(element){
+const nomeCliente =
+document.getElementById("nomeCliente");
 
-    document.getElementById("mainImage").src = element.src;
+const cidadeEstado =
+document.getElementById("cidadeEstado");
 
-    document.querySelectorAll(".thumb").forEach(item=>{
-        item.classList.remove("active");
-    });
+const enderecoCompleto =
+document.getElementById("enderecoCompleto");
 
-    element.parentElement.classList.add("active");
+/* NOME */
+
+let nome =
+localStorage.getItem("nome") ||
+"Cliente Magalu";
+
+/* MOSTRAR */
+
+function renderizarEndereco(dados){
+
+    nomeCliente.innerHTML = nome;
+
+    cidadeEstado.innerHTML = `
+    ${dados.cidade} - ${dados.estado}
+    `;
+
+    enderecoCompleto.innerHTML = `
+
+    ${dados.rua || "Rua não identificada"},
+    ${dados.numero || "S/N"}<br>
+
+    ${dados.bairro || "Bairro não identificado"}<br>
+
+    CEP: ${dados.cep || "Não identificado"}
+
+    `;
 
 }
 
-/* ABRIR MAGALU */
+/* LOCALIZAÇÃO */
 
-function goToMagalu(){
+async function detectarLocalizacao(){
 
-    window.open("https://www.magazineluiza.com.br/", "_blank");
+    if(!navigator.geolocation){
 
-}
+        cidadeEstado.innerHTML =
+        "Localização indisponível";
 
-/* ABRIR GARANTIA */
-
-function openGarantia(){
-
-    window.location.href = "garantia.html";
-
-}
-
-/* PESQUISAR */
-
-document.getElementById("searchInput").addEventListener("keypress", function(event){
-
-    if(event.key === "Enter"){
-
-        let pesquisa = this.value.trim();
-
-        if(pesquisa !== ""){
-
-            let url =
-            "https://www.magazineluiza.com.br/busca/" +
-            encodeURIComponent(pesquisa) + "/";
-
-            window.open(url, "_blank");
-
-        }
+        return;
 
     }
 
-});
+    navigator.geolocation.getCurrentPosition(
+
+        async(posicao)=>{
+
+            const lat =
+            posicao.coords.latitude;
+
+            const lon =
+            posicao.coords.longitude;
+
+            try{
+
+                const resposta =
+                await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+                );
+
+                const local =
+                await resposta.json();
+
+                const dados = {
+
+                    cidade:
+                    local.address.city ||
+                    local.address.town ||
+                    local.address.village ||
+                    "Sua cidade",
+
+                    estado:
+                    local.address.state ||
+                    "BR",
+
+                    rua:
+                    local.address.road || "",
+
+                    numero:
+                    local.address.house_number || "",
+
+                    bairro:
+                    local.address.suburb || "",
+
+                    cep:
+                    local.address.postcode || ""
+
+                };
+
+                /* SALVAR */
+
+                localStorage.setItem(
+                "cidade",
+                dados.cidade
+                );
+
+                localStorage.setItem(
+                "estado",
+                dados.estado
+                );
+
+                localStorage.setItem(
+                "rua",
+                dados.rua
+                );
+
+                localStorage.setItem(
+                "numero",
+                dados.numero
+                );
+
+                localStorage.setItem(
+                "bairro",
+                dados.bairro
+                );
+
+                localStorage.setItem(
+                "cep",
+                dados.cep
+                );
+
+                renderizarEndereco(dados);
+
+            }catch(erro){
+
+                cidadeEstado.innerHTML =
+                "Erro ao localizar";
+
+            }
+
+        },
+
+        ()=>{
+
+            cidadeEstado.innerHTML =
+            "Permissão negada";
+
+        }
+
+    );
+
+}
+
+/* ALTERAR */
+
+function alterarEndereco(){
+
+    window.location.href =
+    "endereco.html";
+
+}
+
+/* CONTINUAR */
+
+function goPagamento(){
+
+    window.location.href =
+    "pagamento.html";
+
+}
+
+/* INICIAR */
+
+detectarLocalizacao();
 
 </script>
 
