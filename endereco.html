@@ -1,0 +1,910 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Entrega - Magalu</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+/>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+body{
+    background:#f5f5f5;
+    font-family:'Inter',sans-serif;
+    color:#222;
+}
+
+/* HEADER */
+
+.top-header{
+    background:#0086ff;
+    padding-top:18px;
+    box-shadow:0 2px 12px rgba(0,0,0,.08);
+}
+
+.logo-area{
+    padding:0 18px 14px;
+}
+
+.logo{
+    color:#fff;
+    font-size:54px;
+    font-weight:900;
+    letter-spacing:-4px;
+}
+
+.rainbow{
+    width:100%;
+    height:6px;
+    background:linear-gradient(
+        90deg,
+        #ffd500,
+        #ff7b00,
+        #ff0066,
+        #7a2cff,
+        #00bfff,
+        #41ff00
+    );
+}
+
+/* STEPS */
+
+.steps{
+    background:#fff;
+    padding:20px 10px 16px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:5px;
+    border-bottom:1px solid #ececec;
+}
+
+.step{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-width:66px;
+    color:#999;
+    font-size:12px;
+    font-weight:700;
+}
+
+.circle{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    border:2px solid #ccc;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff;
+    font-size:17px;
+    margin-bottom:6px;
+}
+
+.line{
+    width:34px;
+    height:2px;
+    background:#ccc;
+    margin-bottom:26px;
+}
+
+.step.done{
+    color:#59cc23;
+}
+
+.step.done .circle{
+    border-color:#59cc23;
+    color:#59cc23;
+}
+
+.step.active{
+    color:#0086ff;
+}
+
+.step.active .circle{
+    border-color:#0086ff;
+    color:#0086ff;
+}
+
+/* CONTAINER */
+
+.container{
+    padding:18px 14px 30px;
+}
+
+/* TITLE */
+
+.page-title{
+    font-size:24px;
+    font-weight:900;
+    margin-bottom:18px;
+    color:#222;
+}
+
+/* ADDRESS */
+
+.address-box{
+    background:#fff;
+    border-radius:22px;
+    padding:20px;
+    box-shadow:
+    0 2px 10px rgba(0,0,0,.03),
+    0 10px 24px rgba(0,0,0,.04);
+}
+
+.address-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+}
+
+.address-left{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.location-icon{
+    min-width:52px;
+    width:52px;
+    height:52px;
+    border-radius:16px;
+    background:#eef6ff;
+    color:#0086ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+}
+
+.address-info span{
+    color:#8d8d8d;
+    font-size:13px;
+    font-weight:600;
+}
+
+.address-info h3{
+    margin-top:3px;
+    font-size:18px;
+    color:#222;
+    font-weight:800;
+}
+
+.change-btn{
+    border:none;
+    background:#eef6ff;
+    color:#0086ff;
+    padding:12px 16px;
+    border-radius:14px;
+    font-size:14px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.address-card{
+    margin-top:18px;
+    border:1px solid #ededed;
+    border-radius:18px;
+    padding:18px;
+    background:#fafafa;
+}
+
+.client-box{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+}
+
+.client-icon{
+    width:46px;
+    height:46px;
+    border-radius:14px;
+    background:#0086ff;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+}
+
+.client-data{
+    flex:1;
+}
+
+.client-data h4{
+    font-size:17px;
+    color:#222;
+    font-weight:800;
+    margin-bottom:6px;
+}
+
+.client-data p{
+    color:#5e5e5e;
+    font-size:14px;
+    line-height:25px;
+}
+
+/* ALERT */
+
+.alert{
+    margin-top:18px;
+    background:#fff8e6;
+    border:1px solid #f0d26b;
+    border-radius:14px;
+    padding:14px 16px;
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+}
+
+.alert i{
+    color:#c8a000;
+    font-size:18px;
+    margin-top:1px;
+}
+
+.alert p{
+    color:#7a6100;
+    font-size:13px;
+    line-height:22px;
+    font-weight:700;
+}
+
+/* DELIVERY */
+
+.delivery-card{
+    background:#fff;
+    margin-top:18px;
+    border-radius:22px;
+    padding:20px;
+    box-shadow:
+    0 2px 10px rgba(0,0,0,.03),
+    0 10px 24px rgba(0,0,0,.04);
+}
+
+.delivery-title{
+    font-size:18px;
+    font-weight:900;
+    margin-bottom:18px;
+}
+
+.product-name{
+    color:#333;
+    font-size:16px;
+    line-height:28px;
+    font-weight:600;
+}
+
+.seller{
+    margin-top:14px;
+    color:#777;
+    font-size:14px;
+    line-height:24px;
+}
+
+.seller strong{
+    color:#222;
+}
+
+.magalu{
+    color:#0086ff;
+    font-weight:900;
+}
+
+/* OPTION */
+
+.option{
+    margin-top:22px;
+    border:2px solid #18b6ff;
+    border-radius:18px;
+    padding:18px;
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+    align-items:flex-start;
+}
+
+.option-left{
+    display:flex;
+    gap:14px;
+}
+
+.radio{
+    width:26px;
+    height:26px;
+    border-radius:50%;
+    border:3px solid #18b6ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-top:2px;
+}
+
+.radio::after{
+    content:"";
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#18b6ff;
+}
+
+.delivery-info h3{
+    font-size:17px;
+    line-height:26px;
+    color:#222;
+    font-weight:800;
+}
+
+.delivery-info p{
+    margin-top:4px;
+    color:#888;
+    font-size:13px;
+    font-weight:600;
+}
+
+.price{
+    color:#0086ff;
+    font-size:21px;
+    font-weight:900;
+    white-space:nowrap;
+}
+
+/* BUTTON */
+
+.continue-btn{
+    width:100%;
+    height:64px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(
+        180deg,
+        #64da2f,
+        #59c923
+    );
+    color:#fff;
+    font-size:21px;
+    font-weight:800;
+    margin-top:24px;
+    cursor:pointer;
+    box-shadow:0 10px 22px rgba(89,201,35,.25);
+}
+
+.continue-btn:active{
+    transform:scale(.98);
+}
+
+/* INFO */
+
+.info-text{
+    margin-top:18px;
+    text-align:center;
+    color:#8a8a8a;
+    font-size:13px;
+    line-height:24px;
+}
+
+/* FOOTER */
+
+.footer{
+    margin-top:34px;
+    padding:34px 18px 70px;
+    background:#efefef;
+    text-align:center;
+}
+
+.footer-top{
+    margin-bottom:20px;
+    color:#666;
+    font-size:15px;
+}
+
+.footer-top a{
+    color:#666;
+    font-weight:800;
+}
+
+.footer p{
+    color:#8d8d8d;
+    font-size:13px;
+    line-height:26px;
+}
+
+/* RESPONSIVO */
+
+@media(max-width:700px){
+
+    .logo{
+        font-size:46px;
+    }
+
+    .page-title{
+        font-size:22px;
+    }
+
+    .option{
+        flex-direction:column;
+    }
+
+    .price{
+        margin-left:40px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div class="top-header">
+
+    <div class="logo-area">
+
+        <div class="logo">
+            magalu
+        </div>
+
+    </div>
+
+    <div class="rainbow"></div>
+
+</div>
+
+<!-- ETAPAS -->
+
+<div class="steps">
+
+    <div class="step done">
+
+        <div class="circle">
+            <i class="fa-solid fa-bag-shopping"></i>
+        </div>
+
+        Sacola
+
+    </div>
+
+    <div class="line"></div>
+
+    <div class="step active">
+
+        <div class="circle">
+            <i class="fa-solid fa-truck"></i>
+        </div>
+
+        Entrega
+
+    </div>
+
+    <div class="line"></div>
+
+    <div class="step">
+
+        <div class="circle">
+            <i class="fa-regular fa-credit-card"></i>
+        </div>
+
+        Pagamento
+
+    </div>
+
+    <div class="line"></div>
+
+    <div class="step">
+
+        <div class="circle">
+            <i class="fa-regular fa-rectangle-list"></i>
+        </div>
+
+        Revisão
+
+    </div>
+
+</div>
+
+<!-- CONTAINER -->
+
+<div class="container">
+
+    <div class="page-title">
+        Opções de entrega
+    </div>
+
+    <!-- ENDEREÇO -->
+
+    <div class="address-box">
+
+        <div class="address-header">
+
+            <div class="address-left">
+
+                <div class="location-icon">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                </div>
+
+                <div class="address-info">
+
+                    <span>
+                        Entregar em
+                    </span>
+
+                    <h3 id="cidadeEstado">
+                        Detectando localização...
+                    </h3>
+
+                </div>
+
+            </div>
+
+            <button
+            class="change-btn"
+            onclick="alterarEndereco()">
+
+                Alterar
+
+            </button>
+
+        </div>
+
+        <!-- CARD -->
+
+        <div class="address-card">
+
+            <div class="client-box">
+
+                <div class="client-icon">
+
+                    <i class="fa-solid fa-house"></i>
+
+                </div>
+
+                <div class="client-data">
+
+                    <h4 id="nomeCliente">
+                        Cliente Magalu
+                    </h4>
+
+                    <p id="enderecoCompleto">
+
+                        Detectando endereço automaticamente...
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- ALERT -->
+
+            <div class="alert">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <p>
+
+                    Revise seu endereço antes
+                    de continuar a compra.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ENTREGA -->
+
+    <div class="delivery-card">
+
+        <div class="delivery-title">
+            Entrega 01 de 01
+        </div>
+
+        <div class="product-name">
+
+            iPhone 14 Pro Max Apple
+            256GB Deep Purple
+
+        </div>
+
+        <div class="seller">
+
+            Vendido por
+            <strong>Magalu</strong><br>
+
+            Entregue por
+            <span class="magalu">magalu</span>
+
+        </div>
+
+        <!-- OPÇÃO -->
+
+        <div class="option">
+
+            <div class="option-left">
+
+                <div class="radio"></div>
+
+                <div class="delivery-info">
+
+                    <h3>
+                        Receba até sexta-feira,
+                        26 de junho
+                    </h3>
+
+                    <p>
+                        Para pagamentos aprovados hoje
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="price">
+                R$ 39,90
+            </div>
+
+        </div>
+
+        <!-- BOTÃO -->
+
+        <button
+        class="continue-btn"
+        onclick="goPagamento()">
+
+            Continuar
+
+        </button>
+
+        <div class="info-text">
+
+            Os prazos de entrega começam
+            após a confirmação do pagamento.
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+
+<div class="footer">
+
+    <div class="footer-top">
+
+        <i class="fa-solid fa-headset"></i>
+
+        Compre pelo
+        <a href="#">
+            chat online
+        </a>
+
+    </div>
+
+    <p>
+
+        Preços e condições exclusivos
+        para compras via internet.
+
+        <br><br>
+
+        Vendas sujeitas à análise
+        e confirmação de dados.
+
+        <br><br>
+
+        Magazine Luiza -
+        Todos os direitos reservados
+
+    </p>
+
+</div>
+
+<script>
+
+/* ELEMENTOS */
+
+const nomeCliente =
+document.getElementById("nomeCliente");
+
+const cidadeEstado =
+document.getElementById("cidadeEstado");
+
+const enderecoCompleto =
+document.getElementById("enderecoCompleto");
+
+/* NOME */
+
+let nome =
+localStorage.getItem("nome") ||
+"Cliente Magalu";
+
+/* MOSTRAR */
+
+function renderizarEndereco(dados){
+
+    nomeCliente.innerHTML = nome;
+
+    cidadeEstado.innerHTML = `
+    ${dados.cidade} - ${dados.estado}
+    `;
+
+    enderecoCompleto.innerHTML = `
+
+    ${dados.rua || "Rua não identificada"},
+    ${dados.numero || "S/N"}<br>
+
+    ${dados.bairro || "Bairro não identificado"}<br>
+
+    CEP: ${dados.cep || "Não identificado"}
+
+    `;
+
+}
+
+/* LOCALIZAÇÃO */
+
+async function detectarLocalizacao(){
+
+    if(!navigator.geolocation){
+
+        cidadeEstado.innerHTML =
+        "Localização indisponível";
+
+        return;
+
+    }
+
+    navigator.geolocation.getCurrentPosition(
+
+        async(posicao)=>{
+
+            const lat =
+            posicao.coords.latitude;
+
+            const lon =
+            posicao.coords.longitude;
+
+            try{
+
+                const resposta =
+                await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+                );
+
+                const local =
+                await resposta.json();
+
+                const dados = {
+
+                    cidade:
+                    local.address.city ||
+                    local.address.town ||
+                    local.address.village ||
+                    "Sua cidade",
+
+                    estado:
+                    local.address.state ||
+                    "BR",
+
+                    rua:
+                    local.address.road || "",
+
+                    numero:
+                    local.address.house_number || "",
+
+                    bairro:
+                    local.address.suburb || "",
+
+                    cep:
+                    local.address.postcode || ""
+
+                };
+
+                /* SALVAR */
+
+                localStorage.setItem(
+                "cidade",
+                dados.cidade
+                );
+
+                localStorage.setItem(
+                "estado",
+                dados.estado
+                );
+
+                localStorage.setItem(
+                "rua",
+                dados.rua
+                );
+
+                localStorage.setItem(
+                "numero",
+                dados.numero
+                );
+
+                localStorage.setItem(
+                "bairro",
+                dados.bairro
+                );
+
+                localStorage.setItem(
+                "cep",
+                dados.cep
+                );
+
+                renderizarEndereco(dados);
+
+            }catch(erro){
+
+                cidadeEstado.innerHTML =
+                "Erro ao localizar";
+
+            }
+
+        },
+
+        ()=>{
+
+            cidadeEstado.innerHTML =
+            "Permissão negada";
+
+        }
+
+    );
+
+}
+
+/* ALTERAR */
+
+function alterarEndereco(){
+
+    window.location.href =
+    "endereco.html";
+
+}
+
+/* CONTINUAR */
+
+function goPagamento(){
+
+    window.location.href =
+    "pagamento.html";
+
+}
+
+/* INICIAR */
+
+detectarLocalizacao();
+
+</script>
+
+</body>
+</html>
