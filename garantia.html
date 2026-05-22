@@ -1,0 +1,732 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Proteção Magalu</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+body{
+    background:#f3f3f3;
+    font-family:'Inter',sans-serif;
+    color:#222;
+}
+
+/* HEADER */
+
+.header{
+    background:#0086ff;
+    padding-top:18px;
+    overflow:hidden;
+    box-shadow:0 4px 18px rgba(0,0,0,0.08);
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+.logo-area{
+    padding:0 22px 18px;
+}
+
+.logo{
+    color:#fff;
+    font-size:58px;
+    font-weight:900;
+    letter-spacing:-4px;
+    user-select:none;
+}
+
+.rainbow-line{
+    width:100%;
+    height:10px;
+    background:linear-gradient(
+        90deg,
+        #ffd500,
+        #ff7b00,
+        #ff0066,
+        #7a2cff,
+        #00bfff,
+        #41ff00
+    );
+}
+
+/* CONTENT */
+
+.container{
+    max-width:860px;
+    margin:auto;
+    padding:16px 14px 260px;
+}
+
+/* CARD */
+
+.card{
+    background:#fff;
+    border-radius:24px;
+    padding:26px;
+    margin-bottom:18px;
+    border:1px solid #ececec;
+    box-shadow:
+    0 2px 8px rgba(0,0,0,0.03),
+    0 12px 30px rgba(0,0,0,0.03);
+    transition:0.2s;
+}
+
+.card:hover{
+    transform:translateY(-2px);
+}
+
+.card-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+}
+
+.left-info{
+    display:flex;
+    align-items:flex-start;
+    gap:16px;
+    flex:1;
+}
+
+/* CHECKBOX */
+
+.checkbox{
+    width:40px;
+    height:40px;
+    border-radius:12px;
+    border:3px solid #d8d8d8;
+    flex-shrink:0;
+    cursor:pointer;
+    transition:0.2s;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff;
+    margin-top:2px;
+}
+
+.checkbox.active{
+    background:#0086ff;
+    border-color:#0086ff;
+    box-shadow:0 8px 18px rgba(0,134,255,0.22);
+}
+
+.checkbox.active::after{
+    content:"✓";
+    color:#fff;
+    font-size:22px;
+    font-weight:900;
+}
+
+/* TEXT */
+
+.title{
+    font-size:25px;
+    line-height:34px;
+    font-weight:800;
+    color:#222;
+}
+
+.price{
+    margin-top:22px;
+    font-size:24px;
+    font-weight:900;
+    color:#222;
+    letter-spacing:-1px;
+}
+
+.pix{
+    margin-top:6px;
+    color:#8f8f8f;
+    font-size:18px;
+    font-weight:600;
+}
+
+/* BADGE */
+
+.badge{
+    background:#0a84ff;
+    color:#fff;
+    font-size:14px;
+    font-weight:800;
+    padding:8px 14px;
+    border-radius:999px;
+    white-space:nowrap;
+    box-shadow:0 8px 18px rgba(10,132,255,0.2);
+}
+
+/* MORE */
+
+.more{
+    margin-top:26px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:18px;
+    font-weight:700;
+    cursor:pointer;
+    color:#333;
+    width:fit-content;
+}
+
+.arrow{
+    transition:0.2s;
+    font-size:16px;
+}
+
+.arrow.rotate{
+    transform:rotate(180deg);
+}
+
+/* DETAILS */
+
+.details{
+    max-height:0;
+    overflow:hidden;
+    transition:0.35s ease;
+}
+
+.details.active{
+    max-height:250px;
+    margin-top:18px;
+}
+
+.details p{
+    color:#666;
+    line-height:30px;
+    font-size:16px;
+}
+
+/* LEGAL CARDS */
+
+.legal-card{
+    background:#fff;
+    border-radius:22px;
+    overflow:hidden;
+    margin-top:18px;
+    border:1px solid #ececec;
+    box-shadow:
+    0 2px 8px rgba(0,0,0,0.03),
+    0 10px 22px rgba(0,0,0,0.02);
+}
+
+.legal-title{
+    padding:28px 22px;
+    font-size:22px;
+    line-height:32px;
+    font-weight:500;
+    color:#333;
+}
+
+.legal-link{
+    border-top:1px solid #ececec;
+    padding:22px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:18px;
+    font-weight:600;
+    color:#333;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.legal-link:hover{
+    background:#fafafa;
+}
+
+.legal-link span{
+    font-size:34px;
+    line-height:0;
+}
+
+/* FOOTER */
+
+.footer{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:#fff;
+    padding:20px 18px 30px;
+    box-shadow:0 -10px 30px rgba(0,0,0,0.08);
+    border-top-left-radius:30px;
+    border-top-right-radius:30px;
+    backdrop-filter:blur(10px);
+}
+
+.footer-content{
+    max-width:860px;
+    margin:auto;
+}
+
+/* BUTTONS */
+
+.buttons{
+    display:flex;
+    gap:14px;
+}
+
+.btn{
+    flex:1;
+    height:72px;
+    border-radius:22px;
+    font-size:22px;
+    font-weight:800;
+    cursor:pointer;
+    transition:0.18s;
+    font-family:'Inter',sans-serif;
+    border:none;
+}
+
+.btn:active{
+    transform:scale(0.97);
+}
+
+.btn-outline{
+    background:#fff;
+    border:3px solid #61c700;
+    color:#61c700;
+}
+
+.btn-green{
+    background:#61c700;
+    color:#fff;
+    box-shadow:0 10px 24px rgba(97,199,0,0.28);
+}
+
+.btn-outline:hover{
+    background:#f8fff2;
+}
+
+.btn-green:hover{
+    background:#58b800;
+}
+
+/* TERMS */
+
+.terms{
+    margin-top:24px;
+    text-align:center;
+    color:#555;
+    line-height:32px;
+    font-size:16px;
+}
+
+.terms strong{
+    color:#222;
+}
+
+.terms a{
+    color:#222;
+    font-weight:800;
+    text-decoration:underline;
+}
+
+/* DOMAIN */
+
+.domain-badge{
+    width:fit-content;
+    margin:26px auto 0;
+    background:#fff;
+    padding:16px 34px;
+    border-radius:999px;
+    font-size:19px;
+    font-weight:700;
+    box-shadow:0 4px 14px rgba(0,0,0,0.05);
+}
+
+/* RESPONSIVO */
+
+@media(max-width:700px){
+
+    .logo{
+        font-size:48px;
+    }
+
+    .container{
+        padding:12px 12px 250px;
+    }
+
+    .card{
+        padding:22px;
+        border-radius:20px;
+    }
+
+    .title{
+        font-size:20px;
+        line-height:30px;
+    }
+
+    .price{
+        font-size:22px;
+        margin-top:18px;
+    }
+
+    .pix{
+        font-size:16px;
+    }
+
+    .badge{
+        font-size:12px;
+        padding:6px 12px;
+    }
+
+    .more{
+        font-size:17px;
+    }
+
+    .legal-title{
+        font-size:18px;
+        line-height:28px;
+        padding:22px 18px;
+    }
+
+    .legal-link{
+        font-size:16px;
+        padding:18px;
+    }
+
+    .buttons{
+        gap:12px;
+    }
+
+    .btn{
+        height:62px;
+        border-radius:18px;
+        font-size:18px;
+    }
+
+    .terms{
+        font-size:15px;
+        line-height:28px;
+    }
+
+    .domain-badge{
+        font-size:16px;
+        padding:14px 24px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <div class="logo-area">
+
+        <div class="logo">
+            magalu
+        </div>
+
+    </div>
+
+    <div class="rainbow-line"></div>
+
+</div>
+
+<!-- CONTENT -->
+
+<div class="container">
+
+    <!-- CARD 1 -->
+
+    <div class="card">
+
+        <div class="card-top">
+
+            <div class="left-info">
+
+                <div
+                class="checkbox active"
+                onclick="toggleCheck(this)">
+                </div>
+
+                <div>
+
+                    <div class="title">
+                        12 meses de Garantia Estendida
+                    </div>
+
+                    <div class="price">
+                        10x de R$ 65,43 sem juros
+                    </div>
+
+                    <div class="pix">
+                        R$ 654,34 no pix
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="badge">
+                Recomendado
+            </div>
+
+        </div>
+
+        <div class="more" onclick="toggleDetails(this)">
+
+            Ver mais
+
+            <span class="arrow">
+                ▼
+            </span>
+
+        </div>
+
+        <div class="details">
+
+            <p>
+                Cobertura adicional para defeitos elétricos e mecânicos após o término da garantia original do fabricante.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- CARD 2 -->
+
+    <div class="card">
+
+        <div class="card-top">
+
+            <div class="left-info">
+
+                <div
+                class="checkbox"
+                onclick="toggleCheck(this)">
+                </div>
+
+                <div>
+
+                    <div class="title">
+                        24 meses de Garantia Estendida
+                    </div>
+
+                    <div class="price">
+                        10x de R$ 103,32 sem juros
+                    </div>
+
+                    <div class="pix">
+                        R$ 1.033,17 no pix
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="more" onclick="toggleDetails(this)">
+
+            Ver mais
+
+            <span class="arrow">
+                ▼
+            </span>
+
+        </div>
+
+        <div class="details">
+
+            <p>
+                Garantia estendida completa com proteção prolongada para o seu aparelho por até 24 meses.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- CARD 3 -->
+
+    <div class="card">
+
+        <div class="card-top">
+
+            <div class="left-info">
+
+                <div
+                class="checkbox"
+                onclick="toggleCheck(this)">
+                </div>
+
+                <div>
+
+                    <div class="title">
+                        12 meses de Roubo e Furto com Quebra Acidental
+                    </div>
+
+                    <div class="price">
+                        10x de R$ 165,31 sem juros
+                    </div>
+
+                    <div class="pix">
+                        R$ 1.653,07 no pix
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="more" onclick="toggleDetails(this)">
+
+            Ver mais
+
+            <span class="arrow">
+                ▼
+            </span>
+
+        </div>
+
+        <div class="details">
+
+            <p>
+                Proteção contra roubo, furto qualificado e quebra acidental com cobertura nacional.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- LEGAL -->
+
+    <div class="legal-card">
+
+        <div class="legal-title">
+            Seguro de Proteção Roubo e Furto com Quebra Acidental
+        </div>
+
+        <div class="legal-link">
+
+            Informações legais
+
+            <span>›</span>
+
+        </div>
+
+    </div>
+
+    <div class="legal-card">
+
+        <div class="legal-title">
+            Seguro de Garantia Estendida Original Ampliada
+        </div>
+
+        <div class="legal-link">
+
+            Informações legais
+
+            <span>›</span>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+
+<div class="footer">
+
+    <div class="footer-content">
+
+        <div class="buttons">
+
+            <!-- BOTÃO AGORA NÃO -->
+
+            <button
+            class="btn btn-outline"
+            onclick="window.location.href='cria-conta.html'">
+
+                Agora não
+
+            </button>
+
+            <!-- BOTÃO INCLUIR PROTEÇÃO -->
+
+            <button
+            class="btn btn-green"
+            onclick="window.location.href='cria-conta.html'">
+
+                Incluir Proteção
+
+            </button>
+
+        </div>
+
+        <div class="terms">
+
+            Ao clicar em "<strong>Incluir proteção</strong>"
+            você concorda com os
+
+            <a href="#">
+                Termos de autorização de cobrança
+            </a>
+
+        </div>
+
+        <div class="domain-badge">
+            magazineluiza.com.br
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function toggleCheck(element){
+
+    document.querySelectorAll(".checkbox").forEach(box=>{
+        box.classList.remove("active");
+    });
+
+    element.classList.add("active");
+
+}
+
+function toggleDetails(button){
+
+    let details =
+    button.nextElementSibling;
+
+    let arrow =
+    button.querySelector(".arrow");
+
+    details.classList.toggle("active");
+
+    arrow.classList.toggle("rotate");
+
+}
+
+</script>
+
+</body>
+</html>
